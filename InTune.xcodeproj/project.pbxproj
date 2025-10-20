@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		516DBAB42EA6D61C00F96876 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 516DBAB32EA6D61C00F96876 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		516DBAB32EA6D61C00F96876 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5193A8462EA6D0D0009B4C43 /* InTune.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InTune.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -32,6 +37,7 @@
 		5193A83D2EA6D0D0009B4C43 = {
 			isa = PBXGroup;
 			children = (
+				516DBAB32EA6D61C00F96876 /* README.md */,
 				5193A8482EA6D0D0009B4C43 /* InTune */,
 				5193A8472EA6D0D0009B4C43 /* Products */,
 			);
@@ -109,6 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				516DBAB42EA6D61C00F96876 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
