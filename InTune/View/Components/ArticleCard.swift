@@ -1,12 +1,15 @@
 import SwiftUI
 
 struct ArticleCard: View {
-    // Hardcoded placeholder content for now
-    let category = "Technology"
-    let title = "Apple, Google, Meta must face lawsuits over casino-style gambling apps"
-    let author = "Bart Jansen"
-
-    @State private var isBookmarked = false
+    let article: Article
+    let isBookmarked: Bool
+    var onBookmarkToggle: ((Article) -> Void)? = nil
+    
+    init(article: Article, isBookmarked: Bool, onBookmarkToggle: ((Article) -> Void)? = nil) {
+        self.article = article
+        self.isBookmarked = isBookmarked
+        self.onBookmarkToggle = onBookmarkToggle
+    }
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
@@ -22,16 +25,16 @@ struct ArticleCard: View {
 
             // MARK: - Text Content
             VStack(alignment: .leading, spacing: 4) {
-                Text(category)
+                Text(article.category ?? "General")
                     .font(.caption)
                     .foregroundColor(.secondary)
 
-                Text(title)
+                Text(article.displayTitle)
                     .font(.headline)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
-                Text(author)
+                Text(article.displayAuthor)
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -40,7 +43,7 @@ struct ArticleCard: View {
 
             // MARK: - Bookmark Button
             Button {
-                isBookmarked.toggle()
+                onBookmarkToggle?(article)
             } label: {
                 Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                     .foregroundColor(isBookmarked ? Color("MainColor") : .gray)
@@ -55,8 +58,8 @@ struct ArticleCard: View {
 
 #Preview {
     VStack(spacing: 16) {
-        ArticleCard()
-        ArticleCard()
+        ArticleCard(article: Article.mockArticle1, isBookmarked: false)
+        ArticleCard(article: Article.mockArticle2, isBookmarked: true)
     }
     .padding()
     .background(Color(.systemGroupedBackground))

@@ -14,7 +14,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-            SavedView()
+            SavedArticlesView()
                 .tabItem {
                     Label("Saved", systemImage: "bookmark")
                 }
