@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var sharedSavedViewModel = SavedArticlesViewModel()
+    
     var body: some View {
         TabView {
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-            SavedView()
+            NewsRecommendationView(savedViewModel: $sharedSavedViewModel)
+                .tabItem {
+                    Label("Recommendations", systemImage: "star.circle")
+                }
+            SavedArticlesView(viewModel: $sharedSavedViewModel)
                 .tabItem {
                     Label("Saved", systemImage: "bookmark")
                 }

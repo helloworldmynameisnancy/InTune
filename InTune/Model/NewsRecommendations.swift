@@ -1,0 +1,250 @@
+//
+//  NewsRecommendations.swift
+//  InTune
+//
+//  Created by Diana Nguyen on 10/28/25.
+//
+// This is mock data for the news recommendations
+
+import Foundation
+
+// MARK: - News Recommendations Extension
+extension Article {
+    
+    // MARK: - Recommended Articles (18 diverse articles)
+    static let recommendedArticles: [Article] = [
+        Article(
+            url: "https://www.bbc.com/news/articles/c1m3zm9jnl1o",
+            source: Source(id: nil, name: "BBC News"),
+            author: nil,
+            title: "Amazon prepares for major layoffs among office workers - reports - BBC",
+            description: "If confirmed, the cuts in Amazon's corporate ranks could mark the company's biggest layoffs in several years.",
+            urlToImage: "https://ichef.bbci.co.uk/news/1024/branded_news/1fb5/live/ca15ef20-b3ab-11f0-99b9-79f0fad0da86.jpg",
+            publishedAt: "2025-10-28T05:09:39Z",
+            content: "Amazon is planning major job cuts among its corporate workers as soon as this week, multiple media outlets have reported.\r\nThe online retail giant plans to lay off as many as 30,000 employees as part… [+1579 chars]",
+            isBookmarked: false,
+            category: "Business"
+        ),
+        
+        Article(
+            url: "https://variety.com/2025/film/awards/wicked-for-good-first-reactions-ariana-grande-cynthia-erivo-1236562502/",
+            source: Source(id: nil, name: "Variety"),
+            author: "Clayton Davis",
+            title: "'Wicked: For Good' Poised to Cast Another Spell on the Oscars as First Reactions Call It a 'Heartbreakingly Tender Conclusion' With 'Jaw-Dropping Performances' - Variety",
+            description: "The first reactions for 'Wicked: For Good' are overwhelmingly positive as the film launches into Oscar race for Cynthia Erivo and Ariana Grande.",
+            urlToImage: "https://variety.com/wp-content/uploads/2025/03/Wicked-For-Good.jpg?w=1000&h=563&crop=1",
+            publishedAt: "2025-10-28T03:55:36Z",
+            content: "Is it time for \"Wicked\" to conquer the Oscars, for good?\r\nUniversal Pictures' musical fantasy sequel appears poised to match or exceed its predecessor's impressive showing at the Academy Awards, base… [+6916 chars]",
+            isBookmarked: false,
+            category: "Entertainment"
+        ),
+        
+        Article(
+            url: "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/monday-night-football-chiefs-run-past-commanders-28-7",
+            source: Source(id: nil, name: "NBCSports.com"),
+            author: "Charean Williams",
+            title: "Monday Night Football: Chiefs run past Commanders 28-7 - NBC Sports",
+            description: "The Chiefs gained 276 yards and scored 21 points in the second half as Patrick Mahomes tossed three TDs.",
+            urlToImage: "https://nbcsports.brightspotcdn.com/dims4/default/b110e53/2147483647/strip/true/crop/3000x1688+0+0/resize/1440x810!/quality/90/?url=https%3A%2F%2Fnbc-sports-production-nbc-sports.s3.us-east-1.amazonaws.com%2Fbrightspot%2F9f%2Fdc%2F0ce4763e440997c98a10f5309d7e%2Fhttps-delivery-gettyimages.com%2Fdownloads%2F2243709641",
+            publishedAt: "2025-10-28T03:17:12Z",
+            content: "The Chiefs are the Chiefs again.\r\nThey won their third consecutive game, blowing out the Commanders in the second half for a 28-7 win. The Chiefs are now 5-3, while the Commanders lost their third in… [+1675 chars]",
+            isBookmarked: false,
+            category: "Sports"
+        ),
+        
+        Article(
+            url: "http://deadline.com/2025/10/dwts-maksim-chmerkovskiy-jan-ravnik-pro-dancer-jen-affleck-1236599591/",
+            source: Source(id: nil, name: "Deadline"),
+            author: "Natalie Oganesyan",
+            title: "'DWTS' Star Jen Affleck Defends Dance Partner Jan Ravnik After Alum Maksim Chmerkovskiy Says He \"Has Absolutely No Business Being A Pro\" - Deadline",
+            description: "Dancing with the Stars competitor Jen Affleck rushed to the defense of her pro partner Jan Ravnik after he was slammed by alum Maksim Chmerkovskiy.",
+            urlToImage: "https://deadline.com/wp-content/uploads/2025/10/dwts_b194d7.jpg?w=1000",
+            publishedAt: "2025-10-28T03:14:00Z",
+            content: "Dancing with the Starscompetitor Jen Affleck rushed to the defense of her pro dance partner Jan Ravnik after the latter was slammed by alum Maksim Chmerkovskiy, who alleged the former Taylor Swift ba… [+2576 chars]",
+            isBookmarked: false,
+            category: "Entertainment"
+        ),
+        
+        Article(
+            url: "https://www.cbsnews.com/news/suspect-charlie-kirk-killing-street-clothes-court/",
+            source: Source(id: "cbs-news", name: "CBS News"),
+            author: nil,
+            title: "Charlie Kirk murder suspect can wear street clothes in court but must be physically restrained, judge rules - CBS News",
+            description: "A Utah judge has ruled that the 22-year-old man charged with killing Charlie Kirk can appear in court wearing street clothes but must be physically restrained due to security concerns.",
+            urlToImage: "https://assets2.cbsnewsstatic.com/hub/i/r/2025/10/27/d617fd07-3b0a-45df-9626-48b621aee9ae/thumbnail/1200x630/a2393fec223b11044da48025c769a78b/cbsn-fusion-judge-in-charlie-kirk-murder-trial-rules-defendant-can-wear-plain-clothes-must-wear-restraints-thumbnail.jpg",
+            publishedAt: "2025-10-28T03:04:00Z",
+            content: "A judge ruled Monday that the 22-year-old Utah man charged in the killing of conservative activist Charlie Kirk will be allowed to wear regular clothes at all pretrial hearings but must be physically… [+3464 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://apnews.com/article/asean-china-free-trade-trump-8a9d0f1ed5e87ebba4b5798275cd3605",
+            source: Source(id: "associated-press", name: "Associated Press"),
+            author: "Eileen Ng, David Rising",
+            title: "China and ASEAN sign expanded free trade pact - AP News",
+            description: "Beijing and the Association of Southeast Asian Nations have signed an expanded free trade agreement as both sides face increased protectionism from the United States. The ASEAN-China Free Trade Area 3.0 was signed on the final day of the annual ASEAN summit.",
+            urlToImage: "https://dims.apnews.com/dims4/default/5bff23e/2147483647/strip/true/crop/7530x4236+0+392/resize/1440x810!/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2Fa1%2F21%2Fb8a9c80ea785b4de27fedbf06b4d%2F78a36ab7f8974a09983a118db398ca65",
+            publishedAt: "2025-10-28T02:36:00Z",
+            content: "KUALA LUMPUR, Malaysia (AP) China signed an expanded version of a free trade agreement Tuesday with the Association of Southeast Asian Nations, with Chinese Premier Li Qiang pitching expanded economi… [+5682 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://www.bbc.com/news/live/c4gzdrd19n5t",
+            source: Source(id: nil, name: "BBC News"),
+            author: "https://www.facebook.com/bbcnews",
+            title: "Trump and Takaichi sign trade and rare earths deals heralding 'golden age' of alliance - BBC",
+            description: "Donald Trump also said he would have a 'fantastic relationship' with Japan's first female prime minister Sanae Takaichi.",
+            urlToImage: "https://ichef.bbci.co.uk/ace/branded_news/1200/cpsprodpb/35c2/live/4e8f69d0-b3a6-11f0-b2a1-6f537f66f9aa.jpg",
+            publishedAt: "2025-10-28T02:32:45Z",
+            content: "Shaimaa KhalilTokyo correspondent\r\nSo far, one remark stands out. President Trump is affording Ms Takaichi a lot of good will.\r\n\"I want to just let you know - any time you have any question, any doub… [+1110 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://nypost.com/2025/10/27/sports/cam-skattebo-got-hospital-delivery-from-eagles-big-dom/",
+            source: Source(id: nil, name: "New York Post"),
+            author: "Christian Arnold",
+            title: "Cam Skattebo got special hospital delivery from Eagles' Big Dom - New York Post",
+            description: "Eagles chief of security Dom DiSandro popped by to check in on injured Giants rookie Cam Skattebo in the hospital and made sure to make the NFC East rival feel at home.",
+            urlToImage: "https://nypost.com/wp-content/uploads/sites/2/2025/10/newspress-collage-h3gcyy0bn-1761610793190.jpg?quality=75&strip=all&1761596443&w=1200",
+            publishedAt: "2025-10-28T01:24:00Z",
+            content: "They dont call it the City of Brotherly Love for nothing. \r\nEagles chief of security Dom DiSandro popped by to check in on injured Giants rookie Cam Skattebo in the hospital and made sure to make the… [+1915 chars]",
+            isBookmarked: false,
+            category: "Sports"
+        ),
+        
+        Article(
+            url: "https://www.chron.com/news/space/article/interstellar-comet-3i-atlas-activity-21122190.php",
+            source: Source(id: nil, name: "Chron.com"),
+            author: "Ariana Garcia",
+            title: "Weird comet from another star system is getting ready to shine - Chron",
+            description: "Interstellar comet 3I/ATLAS is about to become more active as it makes it closest approach to the sun.",
+            urlToImage: "https://s.hdnux.com/photos/01/54/74/51/28559991/3/rawImage.jpg",
+            publishedAt: "2025-10-28T01:09:01Z",
+            content: "Images taken from Gemini South in Chile show the growing tail of comet 3I/ATLAS and the glowing coma. \r\n International Gemini Observatory/NOIRLab/NSF/AURA/Shadow the Scientist Image Processing: J. Mi… [+3769 chars]",
+            isBookmarked: false,
+            category: "Science"
+        ),
+        
+        Article(
+            url: "https://www.nbcnews.com/news/us-news/2-shot-dead-tennessee-plastics-plant-gunman-believed-ex-employee-rcna240163",
+            source: Source(id: "nbc-news", name: "NBC News"),
+            author: "Dennis Romero, John Filippelli",
+            title: "2 shot dead at Tennessee plastics plant; gunman believed to be ex-employee - NBC News",
+            description: "Two employees of a plastics maker were fatally shot Monday morning in Cleveland, Tennessee, authorities said",
+            urlToImage: "https://media-cldnry.s-nbcnews.com/image/upload/t_nbcnews-fp-1200-630,f_auto,q_auto:best/rockcms/2025-10/251027-tennesee-plastics-plant-shooting-mn-2100-659aa4.jpg",
+            publishedAt: "2025-10-28T00:50:00Z",
+            content: "Two employees of a plastics maker were fatally shot Monday morning in Cleveland, Tennessee, authorities said.\r\nThe two men killed at Barku Plastics were Tobias Gleinig and Ivan Aldergot, police said … [+2056 chars]",
+            isBookmarked: false,
+            category: "Crime"
+        ),
+        
+        Article(
+            url: "https://www.cbsnews.com/news/trump-administration-reassign-ice-intensify-deportation-campaign-border-patrol/",
+            source: Source(id: "cbs-news", name: "CBS News"),
+            author: "Camilo  Montoya-Galvez",
+            title: "Trump administration to reassign ICE officials in bid to intensify deportation campaign - CBS News",
+            description: "The Trump administration is shaking up ICE's leadership, with plans to reassign as many as a dozen local leaders, as the agency faces pressure to ramp up arrests, sources told CBS News.",
+            urlToImage: "https://assets2.cbsnewsstatic.com/hub/i/r/2025/10/16/949d4f01-3ed6-4672-9dae-a782eb79be9e/thumbnail/1200x630/43d1783df1fe7038a087fc25d37980ec/gettyimages-2235443593.jpg",
+            publishedAt: "2025-10-28T00:07:00Z",
+            content: "The Trump administration is staging a major shake-up at Immigration and Customs Enforcement, with plans to reassign senior leaders in agency offices across the country amid frustrations over current … [+4061 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://www.washingtonpost.com/health/2025/10/27/iowa-cancer-analysis-methodology/",
+            source: Source(id: "the-washington-post", name: "The Washington Post"),
+            author: "Dan Keating",
+            title: "How The Post found growing rates of young cancer in America's Corn Belt - The Washington Post",
+            description: "In looking into shifting cancer rates, a Washington Post data analysis revealed a divergence: among young adults in the Corn Belt — Iowa, Nebraska, Illinois, Minnesota, Indiana and Kansas — cancer diagnoses are rising more rapidly than in the country as a who…",
+            urlToImage: "https://www.washingtonpost.com/wp-apps/imrs.php?src=https://arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/CZWEJCR7GIRVFVMYG2TB5YI4C4_size-normalized.jpg&w=1440",
+            publishedAt: "2025-10-28T00:02:07Z",
+            content: "In looking into shifting cancer rates, a Washington Post data analysis revealed a divergence: among young adults in the Corn Belt Iowa, Nebraska, Illinois, Minnesota, Indiana and Kansas cancer diagno… [+123 chars]",
+            isBookmarked: false,
+            category: "Health"
+        ),
+        
+        Article(
+            url: "https://www.axios.com/2025/10/27/trump-third-term-constitution",
+            source: Source(id: "axios", name: "Axios"),
+            author: "Josephine Walker",
+            title: "All the times Trump has promoted 2028 run with merch and rhetoric - Axios",
+            description: "He's been dropping hints for years. But the rumors are now swirling louder than ever.",
+            urlToImage: "https://images.axios.com/8Yb7zJqg6zNvF2qdfd7HfjtygjI=/1366x768/smart/2018/01/05/1515110679779.jpg",
+            publishedAt: "2025-10-27T23:52:34Z",
+            content: "Driving the news: On Monday, Trump declined to definitively rule out a third term, instead saying he \"would love to do it.\" \r\n<ul><li>He also floated the idea of Vice President JD Vance and Secretary… [+5406 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://www.politico.com/news/2025/10/27/how-seven-vulnerable-house-republicans-feel-about-an-aca-subsidy-extension-00621144",
+            source: Source(id: "politico", name: "Politico"),
+            author: "Robert King",
+            title: "Here's where the 7 most vulnerable House Republicans stand on an ACA extension - Politico",
+            description: "House Republicans in the toughest races in the nation are generally open to talks with Democrats on extending subsidies, with caveats.",
+            urlToImage: "https://www.politico.com/dims4/default/resize/1200/quality/90/format/jpg?url=https%3A%2F%2Fstatic.politico.com%2F6d%2Fdc%2F7abe9f1a416e8d32b3aa53eb039e%2Fhttps-delivery-gettyimages.com%2Fdownloads%2F2222277672",
+            publishedAt: "2025-10-27T23:47:07Z",
+            content: "But how do the most vulnerable Republicans in the country feel about an extension? Their answers shed light on whether there will be increased pressure on Republican leadership and President Donald T… [+6930 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://www.politico.com/news/2025/10/27/democrats-get-aggressive-on-remapping-congressional-lines-00624231",
+            source: Source(id: "politico", name: "Politico"),
+            author: "Liz Crampton, Shia Kapos, Bill Mahoney",
+            title: "Democrats get aggressive on remapping congressional lines - Politico",
+            description: "The minority party is showing teeth in New York, Illinois and Virginia ahead of the 2026 midterms.",
+            urlToImage: "https://www.politico.com/dims4/default/resize/1200/quality/90/format/jpg?url=https%3A%2F%2Fstatic.politico.com%2F2d%2Fbc%2F049d1abf42a4a0872a2f2ade0fad%2Fgettyimages-2225636427.jpg",
+            publishedAt: "2025-10-27T23:11:32Z",
+            content: "Virginia lawmakers on Monday began to amend the states constitution to enable drawing new lines ahead of the 2026 midterms. And in New York, a prominent Democratic election lawyers firm filed suit Mo… [+4836 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        ),
+        
+        Article(
+            url: "https://arstechnica.com/cars/2025/10/porsches-2026-911-turbo-s-is-a-ballistic-twin-turbo-701-horsepower-monster/",
+            source: Source(id: "ars-technica", name: "Ars Technica"),
+            author: "Ars Contributors",
+            title: "Porsche's 2026 911 Turbo S is a ballistic, twin-turbo, 701-horsepower monster - Ars Technica",
+            description: "Big power, no lag, surprising agility make for a stellar drive—at an astronomical cost.",
+            urlToImage: "https://cdn.arstechnica.net/wp-content/uploads/2025/10/2026-Porsche-911-Turbo-S-first-drive-005-2560x1440.jpg",
+            publishedAt: "2025-10-27T23:01:06Z",
+            content: nil, // This article has null content
+            isBookmarked: false,
+            category: "Technology"
+        ),
+        
+        Article(
+            url: "https://www.bbc.com/news/articles/cn0gw6p8dllo",
+            source: Source(id: nil, name: "BBC News"),
+            author: nil,
+            title: "One long walk beats short strolls for a healthy heart, study says - BBC",
+            description: "Walking for at least 15 minutes without stopping is ideal, according to new research.",
+            urlToImage: "https://ichef.bbci.co.uk/news/1024/branded_news/5a3b/live/7a0d3190-b0f0-11f0-a072-177e9709dffa.jpg",
+            publishedAt: "2025-10-27T22:49:22Z",
+            content: "Michelle RobertsDigital health editor\r\nOne longer walk a day is better for your heart than lots of short strolls, especially if you don't exercise much, according to new research published in Annals … [+3383 chars]",
+            isBookmarked: false,
+            category: "Health"
+        ),
+        
+        Article(
+            url: "https://www.cnn.com/2025/10/27/politics/gavin-newsom-2028-california",
+            source: Source(id: "cnn", name: "CNN"),
+            author: "Arit John",
+            title: "Gavin Newsom explains more of his thinking on a 2028 run - CNN",
+            description: "California Gov. Gavin Newsom expanded on his comments about a potential 2028 presidential campaign during a wide-ranging interview Monday on CNN's \"The Story Is with Elex Michaelson.\"",
+            urlToImage: "https://media.cnn.com/api/v1/images/stellar/prod/c-gettyimages-2242675738.jpg?c=16x9&q=w_800,c_fill",
+            publishedAt: "2025-10-27T22:47:38Z",
+            content: "California Gov. Gavin Newsom expanded on his comments about a potential 2028 presidential campaign during a wide-ranging interview Monday on CNNs The Story Is with Elex Michaelson.\r\nPeople talk about… [+3733 chars]",
+            isBookmarked: false,
+            category: "Politics"
+        )
+    ]
+}
