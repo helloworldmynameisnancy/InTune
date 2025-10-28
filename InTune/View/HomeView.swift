@@ -8,39 +8,40 @@
 import SwiftUI
 
 struct HomeView: View {
+    
     var body: some View {
-        ZStack {
-            
-            BackgroundView()
-            
-            VStack {
-                Image("AppLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 187, height: 231)
+        NavigationStack() {
+            ZStack {
                 
-                Text("ꙆᥒƮᥙᥒᥱ")
-                    .font(.system(size: 50))
-                    .padding(.top, -20)
+                BackgroundView()
                 
-                Text("News curated just for you.")
-                    .font(.system(size: 16))
-                    .padding(.top, 1)
-                    .padding(.bottom, 30)
-                
-                Button {
-                    print("Tune Me In")
-                } label: {
-                    Text("Tune me in")
-                        .font(.system(size: 20))
-                        .foregroundStyle(.white)
-                        .padding()
-                        .padding(.horizontal, 75)
-                        .background(Color("MainColor"))
-                        .cornerRadius(20)
+                VStack {
+                    Image("AppLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 187, height: 231)
+                    
+                    Text("ꙆᥒƮᥙᥒᥱ")
+                        .font(.system(size: 50))
+                        .padding(.top, -20)
+                    
+                    Text("News curated just for you.")
+                        .font(.system(size: 16))
+                        .padding(.top, 1)
+                        .padding(.bottom, 30)
+                    
+                    NavigationLink(destination: MoodView()) {
+                        Text("Tune me in")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white)
+                            .padding()
+                            .padding(.horizontal, 75)
+                            .background(Color("MainColor"))
+                            .cornerRadius(20)
+                    }
                 }
             }
-            
+            .navigationBarBackButtonHidden(true)
         }
         
     }
