@@ -16,31 +16,27 @@ class SavedArticlesViewModel {
     init() {
         print("🚀 SavedArticlesViewModel init() - Starting initialization")
         
-        // One-time cleanup: Clear old UUID-based data (remove this after first successful run)
-        // clearOldUserDefaultsData()  // ← REMOVED: This was clearing saved data on every launch
+        // TEMPORARY: Clear UserDefaults to reset with new URLs (dont delete, just comment out)
+        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
+        print("🧹 Cleared UserDefaults for new mock data URLs")
         
-        // Load saved article IDs from UserDefaults first
+        // Load persistence data
         loadSavedIds()
-        print("🚀 After loadSavedIds() - savedArticleIds count: \(savedArticleIds.count)")
-        // Then load mock data (will merge with persisted state)
         loadMockData()
-        print("🚀 After loadMockData() - savedArticles count: \(savedArticles.count)")
+        
         print("🚀 Final savedArticleIds: \(savedArticleIds)")
         print("🚀 Final savedArticles titles: \(savedArticles.map { $0.displayTitle })")
     }
     
     private func loadMockData() {
         print("📚 loadMockData() - Starting to load mock data")
-        // Load all available articles
+        
+        // Load ALL available articles (mock + recommended)
         let allArticles = [
             Article.mockArticle1,
             Article.mockArticle2,
-            Article.mockArticle3,
-            Article.mockArticle4,
-            Article.mockArticle5,
-            Article.mockArticle6,
-            Article.mockArticle7
-        ]
+        ] + Article.recommendedArticles  // Add recommended articles
+        
         print("📚 All available articles count: \(allArticles.count)")
         
         // If no saved IDs from UserDefaults, start with some articles saved (for demo)
@@ -48,11 +44,6 @@ class SavedArticlesViewModel {
             print("📚 No saved IDs from UserDefaults, using demo data")
             let initiallySavedIds: Set<String> = [
                 Article.mockArticle2.id,
-                Article.mockArticle3.id,
-                Article.mockArticle4.id,
-                Article.mockArticle5.id,
-                Article.mockArticle6.id,
-                Article.mockArticle7.id
             ]
             savedArticleIds = initiallySavedIds
             print("📚 Set demo savedArticleIds count: \(savedArticleIds.count)")
@@ -106,6 +97,37 @@ class SavedArticlesViewModel {
     
     func isArticleSaved(_ article: Article) -> Bool {
         return savedArticleIds.contains(article.id)
+    }
+    
+    // MARK: - Reset Methods
+    
+    func resetAndSaveAllArticles() {
+        print("🔄 Resetting and saving all articles")
+        
+        // Clear current saved data
+        savedArticleIds.removeAll()
+        savedArticles.removeAll()
+        
+        // Clear UserDefaults
+        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
+        
+        // Get all available articles (with updated URLs)
+        let allArticles = [
+            Article.mockArticle1,
+            Article.mockArticle2        ]
+        
+        // Save all articles
+        for article in allArticles {
+            savedArticleIds.insert(article.id)
+            savedArticles.append(article)
+        }
+        
+        // Save to UserDefaults
+        saveToUserDefaults()
+        
+        print("🔄 Reset complete - saved \(savedArticles.count) articles")
+        print("🔄 Saved article IDs: \(Array(savedArticleIds))")
+        print("🔄 Saved article titles: \(savedArticles.map { $0.displayTitle })")
     }
     
     // MARK: - Persistence Methods

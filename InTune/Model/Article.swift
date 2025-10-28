@@ -15,7 +15,7 @@ struct NewsAPIResponse: Codable {
 }
 
 // MARK: - Article Model
-struct Article: Identifiable, Codable {
+struct Article: Identifiable, Codable, Hashable {
     // For SwiftUI lists - use URL as stable identifier
     let id: String
     
@@ -63,7 +63,7 @@ struct Article: Identifiable, Codable {
 }
 
 // MARK: - Source Submodel
-struct Source: Codable {
+struct Source: Codable, Equatable, Hashable {
     let id: String?
     let name: String?
 }
@@ -71,93 +71,28 @@ struct Source: Codable {
 // MARK: - Mock Data for Preview/Testing
 extension Article {
     static let mockArticle1 = Article(
-        url: "https://example.com/article1",
-        source: Source(id: "techcrunch", name: "TechCrunch"),
-        author: "Bart Jansen",
-        title: "Apple, Google, Meta must face lawsuits over casino-style gambling apps",
-        description: "A federal judge ruled that Apple, Google, and Meta must face lawsuits alleging they facilitated illegal gambling through casino-style apps.",
-        urlToImage: nil,
-        publishedAt: "2024-01-15T10:30:00Z",
-        content: "Full article content here...",
-        isBookmarked: false,
-        category: "Technology"
+        url: "https://finance.yahoo.com/news/anonymous-bitcoin-us-seizure-tycoons-093000044.html",
+        source: Source(id: nil, name: "Yahoo Entertainment"),
+        author: "South China Morning Post",
+        title: "How anonymous is bitcoin? US seizure of tycoon's US$13 billion in tokens raises questions",
+        description: "The seizure by US authorities of US$13.4 billion worth of bitcoin from an alleged Cambodian criminal has raised questions over the safety of the digital...",
+        urlToImage: "https://s.yimg.com/ny/api/res/1.2/GPYlMYtqikSpcZbkWYRH7g--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04NTc-/https://media.zenfs.com/en/south_china_morning_post_us_228/987ae97535c7adec4f7fde570934d846",
+        publishedAt: "2025-10-17T09:30:00Z",
+        content: "The seizure by US authorities of US$13.4 billion worth of bitcoin from an alleged Cambodian criminal has raised questions over the safety of the digital assets and prompted frantic speculation in the… [+5470 chars]",
+        isBookmarked: true,
+        category: "Cryptocurrency"
     )
     
     static let mockArticle2 = Article(
-        url: "https://example.com/article2",
-        source: Source(id: "reuters", name: "Reuters"),
-        author: "Sarah Johnson",
-        title: "New AI breakthrough promises faster medical diagnosis",
-        description: "Researchers develop AI system that can diagnose diseases 10x faster than current methods.",
-        urlToImage: nil,
-        publishedAt: "2024-01-14T15:45:00Z",
-        content: "Full article content here...",
+        url: "https://videos.coindesk.com/previews/2gv4H3Y5",
+        source: Source(id: nil, name: "CoinDesk"),
+        author: "CoinDesk",
+        title: "Peter Schiff Challenges Michael Saylor's BTC Strategy",
+        description: "Euro Capital CEO Peter Schiff is challenging Michael Saylor's bitcoin strategy over the critical issue of liquidity. The crypto skeptic argued that billions ...",
+        urlToImage: "https://media.zenfs.com/en/coindesk_75/5b36dbdca6457294f41b1dddcc73dfe6",
+        publishedAt: "2025-09-29T15:49:46Z",
+        content: "Euro Capital CEO Peter Schiff is challenging Michael Saylors bitcoin strategy over the critical issue of liquidity. The crypto skeptic argued that billions of dollars in gold could be sold with limit… [+187 chars]",
         isBookmarked: true,
-        category: "Health"
-    )
-    
-    static let mockArticle3 = Article(
-        url: "https://example.com/article3",
-        source: Source(id: "bbc", name: "BBC News"),
-        author: "Andy Corbley",
-        title: "Gaza doctors are starving while fighting to save lives, evacuated medic tells BBC",
-        description: "Medical professionals in Gaza face extreme conditions as they struggle to provide care amid ongoing conflict.",
-        urlToImage: nil,
-        publishedAt: "2024-01-13T08:15:00Z",
-        content: "Full article content here...",
-        isBookmarked: true,
-        category: "Politics"
-    )
-    
-    static let mockArticle4 = Article(
-        url: "https://example.com/article4",
-        source: Source(id: "guardian", name: "The Guardian"),
-        author: "James Smith",
-        title: "100,000 New Jobs Will Clean Up the Coastline and Protect Species from Plastic, Overde...",
-        description: "Massive environmental initiative creates employment opportunities while addressing ocean pollution crisis.",
-        urlToImage: nil,
-        publishedAt: "2024-01-12T14:20:00Z",
-        content: "Full article content here...",
-        isBookmarked: true,
-        category: "Environment"
-    )
-    
-    static let mockArticle5 = Article(
-        url: "https://example.com/article5",
-        source: Source(id: "cnn", name: "CNN"),
-        author: "Amber Le",
-        title: "2-in-1 Inhaler Reduces Asthma Attacks in Children by 45% Shows New Study",
-        description: "Revolutionary medical device combines two medications to significantly improve pediatric asthma treatment outcomes.",
-        urlToImage: nil,
-        publishedAt: "2024-01-11T11:45:00Z",
-        content: "Full article content here...",
-        isBookmarked: true,
-        category: "Health"
-    )
-    
-    static let mockArticle6 = Article(
-        url: "https://example.com/article6",
-        source: Source(id: "ap", name: "Associated Press"),
-        author: "Wilson Chen",
-        title: "Trump pulls nomination of E.J. Antoni to lead Bureau of Labor Statistics, AP source says",
-        description: "Administrative changes in federal labor statistics leadership as nomination is withdrawn.",
-        urlToImage: nil,
-        publishedAt: "2024-01-10T16:30:00Z",
-        content: "Full article content here...",
-        isBookmarked: true,
-        category: "Politics"
-    )
-    
-    static let mockArticle7 = Article(
-        url: "https://example.com/article7",
-        source: Source(id: "nasa", name: "NASA"),
-        author: "Dr. Maria Rodriguez",
-        title: "James Webb Space Telescope's First Look at an Atmosphere on Distant Exoplanet",
-        description: "Groundbreaking observations reveal atmospheric composition of exoplanet located 700 light-years away.",
-        urlToImage: nil,
-        publishedAt: "2024-01-09T09:00:00Z",
-        content: "Full article content here...",
-        isBookmarked: true,
-        category: "Technology"
+        category: "Cryptocurrency"
     )
 }
