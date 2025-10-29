@@ -31,12 +31,8 @@ class RecommendationViewModel {
     }
     
     func regenerateArticles() {
-        
         let selectedArticles = selectRandomArticles(count: articleQuantity)
         displayedArticles = selectedArticles
-        
-        for article in selectedArticles {
-        }
     }
     
     func updateQuantity(_ newQuantity: Int) {
@@ -60,9 +56,6 @@ class RecommendationViewModel {
         // Check if we need to reset (all articles shown)
         if availableArticles.count < count {
             checkAndResetIfNeeded()
-            
-            // Re-filter after potential reset
-            let refreshedAvailable = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
         }
         
         // Get final available articles

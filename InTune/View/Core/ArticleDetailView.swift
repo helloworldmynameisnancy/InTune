@@ -145,7 +145,7 @@ struct ArticleDetailView: View {
                         }
                         
                         // Read Full Article Button
-                        if let articleURL = article.articleURL {
+                        if article.articleURL != nil {
                             VStack(spacing: 12) {
                                 Divider()
                                     .padding(.vertical, 8)
