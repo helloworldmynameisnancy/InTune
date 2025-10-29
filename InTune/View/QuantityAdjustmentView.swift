@@ -82,10 +82,8 @@ struct QuantityAdjustmentView: View {
 }
 
 #Preview {
-    @State var previewQuantity = 4
-    
-    return QuantityAdjustmentView(
-        quantity: $previewQuantity,
+    QuantityAdjustmentView(
+        quantity: .constant(4),
         onUpdate: { newQuantity in
             print("Preview: Updated quantity to \(newQuantity)")
         }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TimeAvailabilityView: View {
-    @Binding var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goToRecommendations = false
     
@@ -33,10 +33,10 @@ struct TimeAvailabilityView: View {
                 )
                 .navigationBarBackButtonHidden(true)
                 .navigationDestination(isPresented: $goBack) {
-                    TopicExclusionView(savedViewModel: $savedViewModel)
+                    TopicExclusionView()
                 }
                 .navigationDestination(isPresented: $goToRecommendations) {
-                    NewsRecommendationView(savedViewModel: $savedViewModel)
+                    NewsRecommendationView()
                 }
             }
         }
@@ -44,6 +44,6 @@ struct TimeAvailabilityView: View {
 }
 
 #Preview {
-    @State var previewSavedViewModel = SavedArticlesViewModel()
-    return TimeAvailabilityView(savedViewModel: $previewSavedViewModel)
+    TimeAvailabilityView()
+        .environmentObject(SavedArticlesViewModel())
 }

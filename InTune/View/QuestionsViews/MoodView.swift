@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MoodView: View {
-    @Binding var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goNext = false
     
@@ -33,10 +33,10 @@ struct MoodView: View {
             }
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $goNext) {
-                TopicView(savedViewModel: $savedViewModel)
+                TopicView()
             }
             .navigationDestination(isPresented: $goBack) {
-                HomeView(savedViewModel: $savedViewModel)
+                HomeView()
             }
         }
         
@@ -44,6 +44,6 @@ struct MoodView: View {
 }
 
 #Preview {
-    @State var previewSavedViewModel = SavedArticlesViewModel()
-    return MoodView(savedViewModel: $previewSavedViewModel)
+    MoodView()
+        .environmentObject(SavedArticlesViewModel())
 }

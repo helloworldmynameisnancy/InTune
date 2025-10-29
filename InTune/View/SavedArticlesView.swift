@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SavedArticlesView: View {
-    @Binding var viewModel: SavedArticlesViewModel
+    @EnvironmentObject var viewModel: SavedArticlesViewModel
     @State private var selectedArticle: Article?
     
     var body: some View {
@@ -54,6 +54,10 @@ struct SavedArticlesView: View {
                         ScrollView {
                             LazyVStack(spacing: 16) {
                                 ForEach(viewModel.savedArticles) { article in
+                                    let _ = print("📚 SavedArticlesView - Article: \(article.displayTitle)")
+                                    let _ = print("📚 SavedArticlesView - Image URL: \(article.urlToImage ?? "nil")")
+                                    let _ = print("📚 SavedArticlesView - Image URL object: \(article.imageURL?.absoluteString ?? "nil")")
+                                    
                                     ArticleCard(
                                         article: article,
                                         isBookmarked: viewModel.isArticleSaved(article),
@@ -65,6 +69,7 @@ struct SavedArticlesView: View {
                                             selectedArticle = article
                                         }
                                     )
+                                    .id(article.id)
                                 }
                             }
                             .padding(.horizontal, 20)
@@ -75,17 +80,13 @@ struct SavedArticlesView: View {
             }
             .navigationDestination(item: $selectedArticle) { article in
                 print("🔗 NavigationDestination triggered for: \(article.displayTitle)")
-                return ArticleDetailView(
-                    article: article,
-                    viewModel: $viewModel
-                )
+                return ArticleDetailView(article: article)
             }
         }
     }
 }
 
 #Preview {
-    @State var previewViewModel = SavedArticlesViewModel()
-    
-    return SavedArticlesView(viewModel: $previewViewModel)
+    SavedArticlesView()
+        .environmentObject(SavedArticlesViewModel())
 }

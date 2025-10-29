@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var sharedSavedViewModel = SavedArticlesViewModel()
+    @StateObject private var sharedSavedViewModel = SavedArticlesViewModel()
     
     var body: some View {
         TabView {
-            HomeView(savedViewModel: $sharedSavedViewModel)
+            HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-            SavedArticlesView(viewModel: $sharedSavedViewModel)
+            SavedArticlesView()
                 .tabItem {
                     Label("Saved", systemImage: "bookmark")
                 }
@@ -26,6 +26,7 @@ struct ContentView: View {
                 }
         }
         .tint(Color("MainColor"))
+        .environmentObject(sharedSavedViewModel)
     }
 }
 

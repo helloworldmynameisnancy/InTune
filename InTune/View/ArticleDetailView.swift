@@ -10,16 +10,15 @@ import SafariServices
 
 struct ArticleDetailView: View {
     let article: Article
-    @Binding var viewModel: SavedArticlesViewModel
+    @EnvironmentObject var viewModel: SavedArticlesViewModel
     @State private var isBookmarked: Bool
     @State private var showSafari = false
     @Environment(\.dismiss) private var dismiss
     
-    init(article: Article, viewModel: Binding<SavedArticlesViewModel>) {
+    init(article: Article) {
         print("📱 ArticleDetailView init() - Starting initialization for: \(article.displayTitle)")
         self.article = article
-        self._viewModel = viewModel
-        self._isBookmarked = State(initialValue: viewModel.wrappedValue.isArticleSaved(article))
+        self._isBookmarked = State(initialValue: false)
         print("📱 ArticleDetailView init() - Completed initialization")
     }
     
@@ -210,6 +209,14 @@ struct ArticleDetailView: View {
                 }
             }
         }
+        .onAppear {
+            // Check initial bookmark state when view appears
+            isBookmarked = viewModel.isArticleSaved(article)
+        }
+        .onChange(of: viewModel.savedArticles) {
+            // React to changes in saved articles from other views
+            isBookmarked = viewModel.isArticleSaved(article)
+        }
         .sheet(isPresented: $showSafari) {
             if let articleURL = article.articleURL {
                 SafariView(url: articleURL)
@@ -250,9 +257,7 @@ struct SafariView: UIViewControllerRepresentable {
 }
 
 #Preview {
-    @State var previewViewModel = SavedArticlesViewModel()
-    
-    return ArticleDetailView(
+    ArticleDetailView(
         article: Article(
             url: "https://example.com/preview-detail",
             source: Source(id: nil, name: "Preview Source"),
@@ -262,7 +267,7 @@ struct SafariView: UIViewControllerRepresentable {
             urlToImage: nil,
             publishedAt: "2025-01-01T00:00:00Z",
             content: "This is the full content of the preview article for testing purposes."
-        ),
-        viewModel: $previewViewModel
+        )
     )
+    .environmentObject(SavedArticlesViewModel())
 }

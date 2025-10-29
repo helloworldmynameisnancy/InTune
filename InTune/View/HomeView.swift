@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @Binding var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     
     var body: some View {
         NavigationStack() {
@@ -31,7 +31,7 @@ struct HomeView: View {
                         .padding(.top, 1)
                         .padding(.bottom, 30)
                     
-                    NavigationLink(destination: MoodView(savedViewModel: $savedViewModel)) {
+                    NavigationLink(destination: MoodView()) {
                         Text("Tune me in")
                             .font(.system(size: 20))
                             .foregroundStyle(.white)
@@ -49,6 +49,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    @State var previewSavedViewModel = SavedArticlesViewModel()
-    return HomeView(savedViewModel: $previewSavedViewModel)
+    HomeView()
+        .environmentObject(SavedArticlesViewModel())
 }

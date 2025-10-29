@@ -7,18 +7,20 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-@Observable
-class SavedArticlesViewModel {
-    var savedArticles: [Article] = []
+class SavedArticlesViewModel: ObservableObject {
+    @Published var savedArticles: [Article] = []
     private var savedArticleIds: Set<String> = []
     
     init() {
         print("🚀 SavedArticlesViewModel init() - Starting initialization")
         
-        // TEMPORARY: Clear UserDefaults to reset with new URLs (dont delete, just comment out)
+        // TEMPORARY: Clear all UserDefaults to reset everything (DONT DELETE)
 //        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
-//        print("🧹 Cleared UserDefaults for new mock data URLs")
+//        UserDefaults.standard.removeObject(forKey: "shownArticleIds")
+//        UserDefaults.standard.removeObject(forKey: "articleQuantity")
+//        print("🧹 Cleared all UserDefaults - starting fresh")
         
         // Load persistence data
         loadSavedIds()
