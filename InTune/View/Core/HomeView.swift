@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     
     var body: some View {
         NavigationStack() {
@@ -49,4 +50,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environmentObject(SavedArticlesViewModel())
 }

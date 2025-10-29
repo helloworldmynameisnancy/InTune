@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MoodView: View {
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goNext = false
     
@@ -44,4 +45,5 @@ struct MoodView: View {
 
 #Preview {
     MoodView()
+        .environmentObject(SavedArticlesViewModel())
 }

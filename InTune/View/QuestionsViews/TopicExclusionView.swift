@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TopicExclusionView: View {
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goNext = false
     
@@ -41,4 +42,5 @@ struct TopicExclusionView: View {
 
 #Preview {
     TopicExclusionView()
+        .environmentObject(SavedArticlesViewModel())
 }

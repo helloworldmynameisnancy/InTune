@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SavedArticlesView: View {
-    @Binding var viewModel: SavedArticlesViewModel
+    @EnvironmentObject var viewModel: SavedArticlesViewModel
     @State private var selectedArticle: Article?
     
     var body: some View {
@@ -61,10 +61,10 @@ struct SavedArticlesView: View {
                                             viewModel.toggleBookmark(for: article)
                                         },
                                         onTap: { article in
-                                            print("🖱️ ArticleCard tapped - setting selectedArticle")
                                             selectedArticle = article
                                         }
                                     )
+                                    .id(article.id)
                                 }
                             }
                             .padding(.horizontal, 20)
@@ -74,18 +74,13 @@ struct SavedArticlesView: View {
                 }
             }
             .navigationDestination(item: $selectedArticle) { article in
-                print("🔗 NavigationDestination triggered for: \(article.displayTitle)")
-                return ArticleDetailView(
-                    article: article,
-                    viewModel: $viewModel
-                )
+                ArticleDetailView(article: article)
             }
         }
     }
 }
 
 #Preview {
-    @State var previewViewModel = SavedArticlesViewModel()
-    
-    return SavedArticlesView(viewModel: $previewViewModel)
+    SavedArticlesView()
+        .environmentObject(SavedArticlesViewModel())
 }

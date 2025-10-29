@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TopicView: View {
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goNext = false
     
@@ -43,4 +44,5 @@ struct TopicView: View {
 
 #Preview {
     TopicView()
+        .environmentObject(SavedArticlesViewModel())
 }

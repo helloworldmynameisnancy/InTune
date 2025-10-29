@@ -33,7 +33,6 @@ struct QuantityAdjustmentView: View {
                 HStack(spacing: 16) {
                     ForEach([3, 4, 5], id: \.self) { option in
                         Button {
-                            print("🎯 QuantityAdjustmentView - Selected \(option)")
                             quantity = option
                             onUpdate(option)
                         } label: {
@@ -60,7 +59,6 @@ struct QuantityAdjustmentView: View {
                 
                 // Done Button
                 Button {
-                    print("🎯 QuantityAdjustmentView - Done button tapped")
                     dismiss()
                 } label: {
                     Text("Done")
@@ -82,12 +80,9 @@ struct QuantityAdjustmentView: View {
 }
 
 #Preview {
-    @State var previewQuantity = 4
-    
-    return QuantityAdjustmentView(
-        quantity: $previewQuantity,
+    QuantityAdjustmentView(
+        quantity: .constant(4),
         onUpdate: { newQuantity in
-            print("Preview: Updated quantity to \(newQuantity)")
         }
     )
 }

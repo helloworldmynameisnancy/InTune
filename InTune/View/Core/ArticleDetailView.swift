@@ -6,29 +6,20 @@
 //
 
 import SwiftUI
-import SafariServices
 
 struct ArticleDetailView: View {
     let article: Article
-    @Binding var viewModel: SavedArticlesViewModel
+    @EnvironmentObject var viewModel: SavedArticlesViewModel
     @State private var isBookmarked: Bool
     @State private var showSafari = false
-    @Environment(\.dismiss) private var dismiss
     
-    init(article: Article, viewModel: Binding<SavedArticlesViewModel>) {
-        print("📱 ArticleDetailView init() - Starting initialization for: \(article.displayTitle)")
+    init(article: Article) {
         self.article = article
-        self._viewModel = viewModel
-        self._isBookmarked = State(initialValue: viewModel.wrappedValue.isArticleSaved(article))
-        print("📱 ArticleDetailView init() - Completed initialization")
+        self._isBookmarked = State(initialValue: false)
     }
     
     var body: some View {
-        print("📱 ArticleDetailView body() - Rendering for: \(article.displayTitle)")
-        print("📱 Article URL: \(article.url ?? "nil")")
-        print("📱 Article articleURL: \(article.articleURL?.absoluteString ?? "nil")")
-        
-        return ZStack {
+        ZStack {
             BackgroundView()
             
             ScrollView {
@@ -151,14 +142,12 @@ struct ArticleDetailView: View {
                         }
                         
                         // Read Full Article Button
-                        if let articleURL = article.articleURL {
+                        if article.articleURL != nil {
                             VStack(spacing: 12) {
                                 Divider()
                                     .padding(.vertical, 8)
                                 
                                 Button {
-                                    print("🌐 Safari button tapped for: \(article.displayTitle)")
-                                    print("🌐 Opening URL: \(articleURL)")
                                     // Open in SFSafariViewController
                                     showSafari = true
                                 } label: {
@@ -180,15 +169,6 @@ struct ArticleDetailView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
-                            .onAppear {
-                                print("🌐 Safari button visible for: \(article.displayTitle)")
-                                print("🌐 Article URL: \(articleURL)")
-                            }
-                        } else {
-                            Text("")
-                                .onAppear {
-                                    print("🌐 No article URL available for: \(article.displayTitle)")
-                                }
                         }
                     }
                     .padding(.horizontal, 20)
@@ -209,6 +189,14 @@ struct ArticleDetailView: View {
                         .foregroundColor(Color("MainColor"))
                 }
             }
+        }
+        .onAppear {
+            // Check initial bookmark state when view appears
+            isBookmarked = viewModel.isArticleSaved(article)
+        }
+        .onChange(of: viewModel.savedArticles) {
+            // React to changes in saved articles from other views
+            isBookmarked = viewModel.isArticleSaved(article)
         }
         .sheet(isPresented: $showSafari) {
             if let articleURL = article.articleURL {
@@ -233,27 +221,18 @@ struct ArticleDetailView: View {
     }
 }
 
-// MARK: - SafariView Wrapper
-
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-    
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        let safariVC = SFSafariViewController(url: url)
-        safariVC.modalPresentationStyle = .pageSheet
-        return safariVC
-    }
-    
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
-        // No updates needed
-    }
-}
-
 #Preview {
-    @State var previewViewModel = SavedArticlesViewModel()
-    
-    return ArticleDetailView(
-        article: Article.mockArticle1,
-        viewModel: $previewViewModel
+    ArticleDetailView(
+        article: Article(
+            url: "https://example.com/preview-detail",
+            source: Source(id: nil, name: "Preview Source"),
+            author: "Preview Author",
+            title: "Preview Article for Detail View",
+            description: "This is a preview article for testing the ArticleDetailView component",
+            urlToImage: nil,
+            publishedAt: "2025-01-01T00:00:00Z",
+            content: "This is the full content of the preview article for testing purposes."
+        )
     )
+    .environmentObject(SavedArticlesViewModel())
 }

@@ -1,5 +1,46 @@
 import SwiftUI
 
+struct AsyncImageLoader: View {
+    let url: URL
+    @State private var image: UIImage?
+    @State private var isLoading = true
+    
+    var body: some View {
+        Group {
+            if let image = image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            } else if isLoading {
+                Image(systemName: "newspaper")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(Color("MainColor"))
+            } else {
+                Image(systemName: "newspaper")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(Color("MainColor"))
+            }
+        }
+        .onAppear {
+            loadImage()
+        }
+    }
+    
+    private func loadImage() {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            DispatchQueue.main.async {
+                isLoading = false
+                if let data = data, let uiImage = UIImage(data: data) {
+                    image = uiImage
+                } else {
+                }
+            }
+        }.resume()
+    }
+}
+
 struct ArticleCard: View {
     let article: Article
     let isBookmarked: Bool
@@ -15,26 +56,16 @@ struct ArticleCard: View {
 
     var body: some View {
         Button {
-            print("🖱️ ArticleCard tapped for: \(article.displayTitle)")
             onTap?(article)
         } label: {
             HStack(alignment: .top, spacing: 12) {
                 // MARK: - Article Image
                 if let imageURL = article.imageURL {
-                    AsyncImage(url: imageURL) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } placeholder: {
-                        Image(systemName: "newspaper")
-                            .resizable()
-                            .scaledToFit()
-                            .foregroundColor(Color("MainColor"))
-                    }
-                    .frame(width: 80, height: 80)
-                    .clipped()
-                    .background(Color("MainColor").opacity(0.1))
-                    .cornerRadius(12)
+                    AsyncImageLoader(url: imageURL)
+                        .frame(width: 80, height: 80)
+                        .clipped()
+                        .background(Color("MainColor").opacity(0.1))
+                        .cornerRadius(12)
                 } else {
                     // Fallback to newspaper icon if no image URL
                     Image(systemName: "newspaper")
@@ -85,8 +116,32 @@ struct ArticleCard: View {
 
 #Preview {
     VStack(spacing: 16) {
-        ArticleCard(article: Article.mockArticle1, isBookmarked: false)
-        ArticleCard(article: Article.mockArticle2, isBookmarked: true)
+        ArticleCard(
+            article: Article(
+                url: "https://example.com/preview1",
+                source: Source(id: nil, name: "Preview Source"),
+                author: "Preview Author",
+                title: "Preview Article 1",
+                description: "This is a preview article for testing the ArticleCard component",
+                urlToImage: nil,
+                publishedAt: "2025-01-01T00:00:00Z",
+                content: "Preview content here"
+            ),
+            isBookmarked: false
+        )
+        ArticleCard(
+            article: Article(
+                url: "https://example.com/preview2",
+                source: Source(id: nil, name: "Preview Source"),
+                author: "Preview Author",
+                title: "Preview Article 2",
+                description: "This is another preview article for testing",
+                urlToImage: nil,
+                publishedAt: "2025-01-01T00:00:00Z",
+                content: "More preview content"
+            ),
+            isBookmarked: true
+        )
     }
     .padding()
     .background(Color(.systemGroupedBackground))
