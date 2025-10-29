@@ -54,7 +54,6 @@ struct SavedArticlesView: View {
                         ScrollView {
                             LazyVStack(spacing: 16) {
                                 ForEach(viewModel.savedArticles) { article in
-                                    
                                     ArticleCard(
                                         article: article,
                                         isBookmarked: viewModel.isArticleSaved(article),
@@ -75,7 +74,7 @@ struct SavedArticlesView: View {
                 }
             }
             .navigationDestination(item: $selectedArticle) { article in
-                return ArticleDetailView(article: article)
+                ArticleDetailView(article: article)
             }
         }
     }

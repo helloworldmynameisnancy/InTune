@@ -13,7 +13,6 @@ struct ArticleDetailView: View {
     @EnvironmentObject var viewModel: SavedArticlesViewModel
     @State private var isBookmarked: Bool
     @State private var showSafari = false
-    @Environment(\.dismiss) private var dismiss
     
     init(article: Article) {
         self.article = article
@@ -21,8 +20,7 @@ struct ArticleDetailView: View {
     }
     
     var body: some View {
-        
-        return ZStack {
+        ZStack {
             BackgroundView()
             
             ScrollView {
@@ -172,12 +170,6 @@ struct ArticleDetailView: View {
                                     .font(.caption)
                                     .foregroundColor(.secondary)
                             }
-                            .onAppear {
-                            }
-                        } else {
-                            Text("")
-                                .onAppear {
-                                }
                         }
                     }
                     .padding(.horizontal, 20)
@@ -242,7 +234,6 @@ struct SafariView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
-        // No updates needed
     }
 }
 

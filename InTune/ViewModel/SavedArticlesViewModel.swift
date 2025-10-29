@@ -13,9 +13,13 @@ class SavedArticlesViewModel: ObservableObject {
     @Published var savedArticles: [Article] = []
     private var savedArticleIds: Set<String> = []
     
+    private enum UserDefaultsKeys {
+        static let savedArticleIds = "savedArticleIds"
+    }
+    
     init() {
         // TEMPORARY: Clear all UserDefaults to reset everything (DONT DELETE)
-//        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
+//        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.savedArticleIds)
 //        UserDefaults.standard.removeObject(forKey: "shownArticleIds")
 //        UserDefaults.standard.removeObject(forKey: "articleQuantity")
         
@@ -28,13 +32,6 @@ class SavedArticlesViewModel: ObservableObject {
         
         // Load only recommended articles (mock data removed)
         let allArticles = Article.recommendedArticles
-        
-        
-        // If no saved IDs from UserDefaults, start with empty saved articles
-        if savedArticleIds.isEmpty {
-            savedArticleIds = Set<String>()
-        } else {
-        }
         
         // Filter articles to only include those with IDs in saved set
         savedArticles = allArticles.filter { savedArticleIds.contains($0.id) }
@@ -78,7 +75,7 @@ class SavedArticlesViewModel: ObservableObject {
         savedArticles.removeAll()
         
         // Clear UserDefaults
-        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.savedArticleIds)
         
         // Get all available articles from recommendations
         let allArticles = Article.recommendedArticles
@@ -96,25 +93,18 @@ class SavedArticlesViewModel: ObservableObject {
     
     // MARK: - Persistence Methods
     
-    private func clearOldUserDefaultsData() {
-        // Clear the old "savedArticleIds" key that contains UUIDs
-        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
-    }
-    
     private func loadSavedIds() {
         // Load saved article IDs from UserDefaults
-        if let data = UserDefaults.standard.data(forKey: "savedArticleIds"),
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.savedArticleIds),
            let ids = try? JSONDecoder().decode([String].self, from: data) {
             savedArticleIds = Set(ids)
-        } else {
         }
     }
     
     private func saveToUserDefaults() {
         // Save saved article IDs to UserDefaults
         if let data = try? JSONEncoder().encode(Array(savedArticleIds)) {
-            UserDefaults.standard.set(data, forKey: "savedArticleIds")
-        } else {
+            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.savedArticleIds)
         }
     }
 }

@@ -14,6 +14,11 @@ class RecommendationViewModel {
     private var shownArticleIds: Set<String> = []
     var articleQuantity: Int = 4
     
+    private enum UserDefaultsKeys {
+        static let shownRecommendationIds = "shownRecommendationIds"
+        static let recommendationQuantity = "recommendationQuantity"
+    }
+    
     init() {
         
         // Load persistence data
@@ -94,14 +99,14 @@ class RecommendationViewModel {
     private func loadPreferences() {
         
         // Load shown article IDs
-        if let data = UserDefaults.standard.data(forKey: "shownRecommendationIds"),
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.shownRecommendationIds),
            let ids = try? JSONDecoder().decode([String].self, from: data) {
             shownArticleIds = Set(ids)
         } else {
         }
         
         // Load quantity preference
-        let savedQuantity = UserDefaults.standard.integer(forKey: "recommendationQuantity")
+        let savedQuantity = UserDefaults.standard.integer(forKey: UserDefaultsKeys.recommendationQuantity)
         if savedQuantity >= 3 && savedQuantity <= 5 {
             articleQuantity = savedQuantity
         } else {
@@ -111,13 +116,13 @@ class RecommendationViewModel {
     private func saveShownIds() {
         
         if let data = try? JSONEncoder().encode(Array(shownArticleIds)) {
-            UserDefaults.standard.set(data, forKey: "shownRecommendationIds")
+            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.shownRecommendationIds)
         } else {
         }
     }
     
     private func saveQuantity() {
         
-        UserDefaults.standard.set(articleQuantity, forKey: "recommendationQuantity")
+        UserDefaults.standard.set(articleQuantity, forKey: UserDefaultsKeys.recommendationQuantity)
     }
 }

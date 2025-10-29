@@ -102,8 +102,6 @@ struct NewsRecommendationView: View {
         }
         .navigationDestination(item: $selectedArticle) { article in
             ArticleDetailView(article: article)
-                .onAppear {
-                }
         }
         .sheet(isPresented: $showQuantitySheet) {
             QuantityAdjustmentView(
@@ -115,8 +113,6 @@ struct NewsRecommendationView: View {
                     viewModel.updateQuantity(newQuantity)
                 }
             )
-        }
-        .onAppear {
         }
     }
 }
