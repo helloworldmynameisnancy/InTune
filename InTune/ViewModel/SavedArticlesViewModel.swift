@@ -24,13 +24,13 @@ class SavedArticlesViewModel: ObservableObject {
 //        UserDefaults.standard.removeObject(forKey: "articleQuantity")
         
         // Load persistence data
-        loadSavedIds()
-        loadMockData()
+        loadSavedArticleIds()
+        syncSavedArticles()
     }
     
-    private func loadMockData() {
-        
-        // Load only recommended articles (mock data removed)
+    private func syncSavedArticles() {
+        // Sync savedArticles array with available articles from repository
+        // Filters Article.recommendedArticles to only include articles with IDs in savedArticleIds
         let allArticles = Article.recommendedArticles
         
         // Filter articles to only include those with IDs in saved set
@@ -50,61 +50,32 @@ class SavedArticlesViewModel: ObservableObject {
         }
         
         // Save changes to UserDefaults
-        saveToUserDefaults()
+        saveSavedArticleIds()
         
-    }
-    
-    func addArticle(_ article: Article) {
-        // Add article to saved list (for future use)
-        if !savedArticleIds.contains(article.id) {
-            savedArticleIds.insert(article.id)
-            savedArticles.append(article)
-        }
     }
     
     func isArticleSaved(_ article: Article) -> Bool {
         return savedArticleIds.contains(article.id)
     }
     
-    // MARK: - Reset Methods
-    
-    func resetAndSaveAllArticles() {
-        
-        // Clear current saved data
-        savedArticleIds.removeAll()
-        savedArticles.removeAll()
-        
-        // Clear UserDefaults
-        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.savedArticleIds)
-        
-        // Get all available articles from recommendations
-        let allArticles = Article.recommendedArticles
-        
-        // Save all articles
-        for article in allArticles {
-            savedArticleIds.insert(article.id)
-            savedArticles.append(article)
-        }
-        
-        // Save to UserDefaults
-        saveToUserDefaults()
-        
-    }
-    
     // MARK: - Persistence Methods
     
-    private func loadSavedIds() {
+    private func loadSavedArticleIds() {
         // Load saved article IDs from UserDefaults
         if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.savedArticleIds),
            let ids = try? JSONDecoder().decode([String].self, from: data) {
             savedArticleIds = Set(ids)
+        } else {
+            print("ℹ️ SavedArticlesViewModel - No saved article IDs found in UserDefaults or failed to decode")
         }
     }
     
-    private func saveToUserDefaults() {
+    private func saveSavedArticleIds() {
         // Save saved article IDs to UserDefaults
         if let data = try? JSONEncoder().encode(Array(savedArticleIds)) {
             UserDefaults.standard.set(data, forKey: UserDefaultsKeys.savedArticleIds)
+        } else {
+            print("⚠️ SavedArticlesViewModel - Failed to encode saved article IDs for UserDefaults")
         }
     }
 }

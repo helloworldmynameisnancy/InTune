@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SafariServices
 
 struct ArticleDetailView: View {
     let article: Article
@@ -219,21 +218,6 @@ struct ArticleDetailView: View {
         }
         
         return dateString
-    }
-}
-
-// MARK: - SafariView Wrapper
-
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-    
-    func makeUIViewController(context: Context) -> SFSafariViewController {
-        let safariVC = SFSafariViewController(url: url)
-        safariVC.modalPresentationStyle = .pageSheet
-        return safariVC
-    }
-    
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {
     }
 }
 

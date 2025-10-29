@@ -12,28 +12,32 @@ import SwiftUI
 class RecommendationViewModel {
     var displayedArticles: [Article] = []
     private var shownArticleIds: Set<String> = []
-    var articleQuantity: Int = 4
+    var articleQuantity: Int = Constants.defaultQuantity
     
     private enum UserDefaultsKeys {
         static let shownRecommendationIds = "shownRecommendationIds"
         static let recommendationQuantity = "recommendationQuantity"
     }
     
+    // Article Quantity Setter
+    private enum Constants {
+        static let minQuantity = 3
+        static let maxQuantity = 5
+        static let defaultQuantity = 4
+    }
+    
     init() {
         
         // Load persistence data
-        loadPreferences()
+        loadShownArticleIds()
+        loadArticleQuantity()
         
         // Auto-load initial articles
-        loadInitialArticles()
+        regenerateArticles()
         
     }
     
     // MARK: - Public Methods
-    
-    func loadInitialArticles() {
-        regenerateArticles()
-    }
     
     func regenerateArticles() {
         let selectedArticles = selectRandomArticles(count: articleQuantity)
@@ -42,29 +46,32 @@ class RecommendationViewModel {
     
     func updateQuantity(_ newQuantity: Int) {
         
-        guard newQuantity >= 3 && newQuantity <= 5 else {
+        guard newQuantity >= Constants.minQuantity && newQuantity <= Constants.maxQuantity else {
             return
         }
         
         articleQuantity = newQuantity
-        saveQuantity()
+        saveArticleQuantity()
         
     }
     
     // MARK: - Private Methods
     
+    // temporary
     private func selectRandomArticles(count: Int) -> [Article] {
         
         // Get available articles (not yet shown)
-        let availableArticles = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
+        var availableArticles = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
         
         // Check if we need to reset (all articles shown)
         if availableArticles.count < count {
-            checkAndResetIfNeeded()
+            resetShownIdsIfAllArticlesShown()
+            // Re-filter after potential reset
+            availableArticles = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
         }
         
-        // Get final available articles
-        let finalAvailable = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
+        // Use filtered articles
+        let finalAvailable = availableArticles
         
         // Select random articles
         let selectedCount = min(count, finalAvailable.count)
@@ -77,12 +84,12 @@ class RecommendationViewModel {
         }
         
         // Save updated shown IDs
-        saveShownIds()
+        saveShownArticleIds()
         
         return selected
     }
     
-    private func checkAndResetIfNeeded() {
+    private func resetShownIdsIfAllArticlesShown() {
         
         let totalArticles = Article.recommendedArticles.count
         let shownCount = shownArticleIds.count
@@ -90,38 +97,40 @@ class RecommendationViewModel {
         
         if shownCount >= totalArticles {
             shownArticleIds.removeAll()
-            saveShownIds()
+            saveShownArticleIds()
         }
     }
     
     // MARK: - Persistence Methods
     
-    private func loadPreferences() {
-        
-        // Load shown article IDs
+    private func loadShownArticleIds() {
+        // Load shown article IDs from UserDefaults
         if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.shownRecommendationIds),
            let ids = try? JSONDecoder().decode([String].self, from: data) {
             shownArticleIds = Set(ids)
         } else {
-        }
-        
-        // Load quantity preference
-        let savedQuantity = UserDefaults.standard.integer(forKey: UserDefaultsKeys.recommendationQuantity)
-        if savedQuantity >= 3 && savedQuantity <= 5 {
-            articleQuantity = savedQuantity
-        } else {
+            print("RecommendationViewModel - No shown article IDs found in UserDefaults or failed to decode")
         }
     }
     
-    private func saveShownIds() {
+    private func loadArticleQuantity() {
+        // Load quantity preference from UserDefaults
+        let savedQuantity = UserDefaults.standard.integer(forKey: UserDefaultsKeys.recommendationQuantity)
+        if savedQuantity >= Constants.minQuantity && savedQuantity <= Constants.maxQuantity {
+            articleQuantity = savedQuantity
+        }
+    }
+    
+    private func saveShownArticleIds() {
         
         if let data = try? JSONEncoder().encode(Array(shownArticleIds)) {
             UserDefaults.standard.set(data, forKey: UserDefaultsKeys.shownRecommendationIds)
         } else {
+            print("RecommendationViewModel - Failed to encode shown article IDs for UserDefaults")
         }
     }
     
-    private func saveQuantity() {
+    private func saveArticleQuantity() {
         
         UserDefaults.standard.set(articleQuantity, forKey: UserDefaultsKeys.recommendationQuantity)
     }
