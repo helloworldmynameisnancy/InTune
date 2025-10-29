@@ -23,7 +23,7 @@ struct NewsRecommendationView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Recommended For You")
+                                Text("Articles")
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)

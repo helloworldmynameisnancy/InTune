@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct TimeAvailabilityView: View {
+    @Binding var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
+    @State private var goToRecommendations = false
     
     var body: some View {
         NavigationStack {
@@ -25,12 +27,16 @@ struct TimeAvailabilityView: View {
                     },
                     onNext: {
                         print("Generate News tapped!")
+                        goToRecommendations = true
                     },
                     isFinalPage: true
                 )
                 .navigationBarBackButtonHidden(true)
                 .navigationDestination(isPresented: $goBack) {
-                    TopicExclusionView()
+                    TopicExclusionView(savedViewModel: $savedViewModel)
+                }
+                .navigationDestination(isPresented: $goToRecommendations) {
+                    NewsRecommendationView(savedViewModel: $savedViewModel)
                 }
             }
         }
@@ -38,5 +44,6 @@ struct TimeAvailabilityView: View {
 }
 
 #Preview {
-    TimeAvailabilityView()
+    @State var previewSavedViewModel = SavedArticlesViewModel()
+    return TimeAvailabilityView(savedViewModel: $previewSavedViewModel)
 }

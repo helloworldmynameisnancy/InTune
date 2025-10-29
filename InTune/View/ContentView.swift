@@ -12,13 +12,9 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            HomeView()
+            HomeView(savedViewModel: $sharedSavedViewModel)
                 .tabItem {
                     Label("Home", systemImage: "house")
-                }
-            NewsRecommendationView(savedViewModel: $sharedSavedViewModel)
-                .tabItem {
-                    Label("Recommendations", systemImage: "star.circle")
                 }
             SavedArticlesView(viewModel: $sharedSavedViewModel)
                 .tabItem {

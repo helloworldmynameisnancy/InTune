@@ -17,8 +17,8 @@ class SavedArticlesViewModel {
         print("🚀 SavedArticlesViewModel init() - Starting initialization")
         
         // TEMPORARY: Clear UserDefaults to reset with new URLs (dont delete, just comment out)
-        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
-        print("🧹 Cleared UserDefaults for new mock data URLs")
+//        UserDefaults.standard.removeObject(forKey: "savedArticleIds")
+//        print("🧹 Cleared UserDefaults for new mock data URLs")
         
         // Load persistence data
         loadSavedIds()
@@ -31,22 +31,16 @@ class SavedArticlesViewModel {
     private func loadMockData() {
         print("📚 loadMockData() - Starting to load mock data")
         
-        // Load ALL available articles (mock + recommended)
-        let allArticles = [
-            Article.mockArticle1,
-            Article.mockArticle2,
-        ] + Article.recommendedArticles  // Add recommended articles
+        // Load only recommended articles (mock data removed)
+        let allArticles = Article.recommendedArticles
         
         print("📚 All available articles count: \(allArticles.count)")
         
-        // If no saved IDs from UserDefaults, start with some articles saved (for demo)
+        // If no saved IDs from UserDefaults, start with empty saved articles
         if savedArticleIds.isEmpty {
-            print("📚 No saved IDs from UserDefaults, using demo data")
-            let initiallySavedIds: Set<String> = [
-                Article.mockArticle2.id,
-            ]
-            savedArticleIds = initiallySavedIds
-            print("📚 Set demo savedArticleIds count: \(savedArticleIds.count)")
+            print("📚 No saved IDs from UserDefaults, starting with empty saved articles")
+            savedArticleIds = Set<String>()
+            print("📚 Set empty savedArticleIds count: \(savedArticleIds.count)")
         } else {
             print("📚 Using persisted savedArticleIds count: \(savedArticleIds.count)")
         }
@@ -111,10 +105,8 @@ class SavedArticlesViewModel {
         // Clear UserDefaults
         UserDefaults.standard.removeObject(forKey: "savedArticleIds")
         
-        // Get all available articles (with updated URLs)
-        let allArticles = [
-            Article.mockArticle1,
-            Article.mockArticle2        ]
+        // Get all available articles from recommendations
+        let allArticles = Article.recommendedArticles
         
         // Save all articles
         for article in allArticles {

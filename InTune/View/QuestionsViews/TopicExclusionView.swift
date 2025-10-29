@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TopicExclusionView: View {
+    @Binding var savedViewModel: SavedArticlesViewModel
     @State private var goBack = false
     @State private var goNext = false
     
@@ -30,15 +31,16 @@ struct TopicExclusionView: View {
             )
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $goNext) {
-                TimeAvailabilityView()
+                TimeAvailabilityView(savedViewModel: $savedViewModel)
             }
             .navigationDestination(isPresented: $goBack) {
-                TopicView()
+                TopicView(savedViewModel: $savedViewModel)
             }
         }
     }
 }
 
 #Preview {
-    TopicExclusionView()
+    @State var previewSavedViewModel = SavedArticlesViewModel()
+    return TopicExclusionView(savedViewModel: $previewSavedViewModel)
 }

@@ -85,8 +85,32 @@ struct ArticleCard: View {
 
 #Preview {
     VStack(spacing: 16) {
-        ArticleCard(article: Article.mockArticle1, isBookmarked: false)
-        ArticleCard(article: Article.mockArticle2, isBookmarked: true)
+        ArticleCard(
+            article: Article(
+                url: "https://example.com/preview1",
+                source: Source(id: nil, name: "Preview Source"),
+                author: "Preview Author",
+                title: "Preview Article 1",
+                description: "This is a preview article for testing the ArticleCard component",
+                urlToImage: nil,
+                publishedAt: "2025-01-01T00:00:00Z",
+                content: "Preview content here"
+            ),
+            isBookmarked: false
+        )
+        ArticleCard(
+            article: Article(
+                url: "https://example.com/preview2",
+                source: Source(id: nil, name: "Preview Source"),
+                author: "Preview Author",
+                title: "Preview Article 2",
+                description: "This is another preview article for testing",
+                urlToImage: nil,
+                publishedAt: "2025-01-01T00:00:00Z",
+                content: "More preview content"
+            ),
+            isBookmarked: true
+        )
     }
     .padding()
     .background(Color(.systemGroupedBackground))

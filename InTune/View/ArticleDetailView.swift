@@ -253,7 +253,16 @@ struct SafariView: UIViewControllerRepresentable {
     @State var previewViewModel = SavedArticlesViewModel()
     
     return ArticleDetailView(
-        article: Article.mockArticle1,
+        article: Article(
+            url: "https://example.com/preview-detail",
+            source: Source(id: nil, name: "Preview Source"),
+            author: "Preview Author",
+            title: "Preview Article for Detail View",
+            description: "This is a preview article for testing the ArticleDetailView component",
+            urlToImage: nil,
+            publishedAt: "2025-01-01T00:00:00Z",
+            content: "This is the full content of the preview article for testing purposes."
+        ),
         viewModel: $previewViewModel
     )
 }
