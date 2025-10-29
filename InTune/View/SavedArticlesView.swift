@@ -54,9 +54,6 @@ struct SavedArticlesView: View {
                         ScrollView {
                             LazyVStack(spacing: 16) {
                                 ForEach(viewModel.savedArticles) { article in
-                                    let _ = print("📚 SavedArticlesView - Article: \(article.displayTitle)")
-                                    let _ = print("📚 SavedArticlesView - Image URL: \(article.urlToImage ?? "nil")")
-                                    let _ = print("📚 SavedArticlesView - Image URL object: \(article.imageURL?.absoluteString ?? "nil")")
                                     
                                     ArticleCard(
                                         article: article,
@@ -65,7 +62,6 @@ struct SavedArticlesView: View {
                                             viewModel.toggleBookmark(for: article)
                                         },
                                         onTap: { article in
-                                            print("🖱️ ArticleCard tapped - setting selectedArticle")
                                             selectedArticle = article
                                         }
                                     )
@@ -79,7 +75,6 @@ struct SavedArticlesView: View {
                 }
             }
             .navigationDestination(item: $selectedArticle) { article in
-                print("🔗 NavigationDestination triggered for: \(article.displayTitle)")
                 return ArticleDetailView(article: article)
             }
         }

@@ -38,7 +38,6 @@ struct NewsRecommendationView: View {
                         HStack(spacing: 12) {
                             // Refresh Button
                             Button {
-                                print("🎯 NewsRecommendationView - Refresh button tapped")
                                 viewModel.regenerateArticles()
                             } label: {
                                 Image(systemName: "arrow.clockwise")
@@ -48,7 +47,6 @@ struct NewsRecommendationView: View {
                             
                             // Quantity Adjustment Button
                             Button {
-                                print("🎯 NewsRecommendationView - Ellipsis button tapped")
                                 showQuantitySheet = true
                             } label: {
                                 Image(systemName: "ellipsis.circle")
@@ -88,11 +86,9 @@ struct NewsRecommendationView: View {
                                     article: article,
                                     isBookmarked: savedViewModel.isArticleSaved(article),
                                     onBookmarkToggle: { article in
-                                        print("🎯 NewsRecommendationView - Bookmark toggle for: \(article.displayTitle)")
                                         savedViewModel.toggleBookmark(for: article)
                                     },
                                     onTap: { article in
-                                        print("🎯 NewsRecommendationView - Article tapped: \(article.displayTitle)")
                                         selectedArticle = article
                                     }
                                 )
@@ -107,7 +103,6 @@ struct NewsRecommendationView: View {
         .navigationDestination(item: $selectedArticle) { article in
             ArticleDetailView(article: article)
                 .onAppear {
-                    print("🎯 NewsRecommendationView - NavigationDestination triggered for: \(article.displayTitle)")
                 }
         }
         .sheet(isPresented: $showQuantitySheet) {
@@ -117,13 +112,11 @@ struct NewsRecommendationView: View {
                     set: { _ in }
                 ),
                 onUpdate: { newQuantity in
-                    print("🎯 NewsRecommendationView - Quantity updated to: \(newQuantity)")
                     viewModel.updateQuantity(newQuantity)
                 }
             )
         }
         .onAppear {
-            print("🎯 NewsRecommendationView - View appeared")
         }
     }
 }

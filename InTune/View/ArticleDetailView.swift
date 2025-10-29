@@ -16,16 +16,11 @@ struct ArticleDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     init(article: Article) {
-        print("📱 ArticleDetailView init() - Starting initialization for: \(article.displayTitle)")
         self.article = article
         self._isBookmarked = State(initialValue: false)
-        print("📱 ArticleDetailView init() - Completed initialization")
     }
     
     var body: some View {
-        print("📱 ArticleDetailView body() - Rendering for: \(article.displayTitle)")
-        print("📱 Article URL: \(article.url ?? "nil")")
-        print("📱 Article articleURL: \(article.articleURL?.absoluteString ?? "nil")")
         
         return ZStack {
             BackgroundView()
@@ -156,8 +151,6 @@ struct ArticleDetailView: View {
                                     .padding(.vertical, 8)
                                 
                                 Button {
-                                    print("🌐 Safari button tapped for: \(article.displayTitle)")
-                                    print("🌐 Opening URL: \(articleURL)")
                                     // Open in SFSafariViewController
                                     showSafari = true
                                 } label: {
@@ -180,13 +173,10 @@ struct ArticleDetailView: View {
                                     .foregroundColor(.secondary)
                             }
                             .onAppear {
-                                print("🌐 Safari button visible for: \(article.displayTitle)")
-                                print("🌐 Article URL: \(articleURL)")
                             }
                         } else {
                             Text("")
                                 .onAppear {
-                                    print("🌐 No article URL available for: \(article.displayTitle)")
                                 }
                         }
                     }

@@ -29,15 +29,12 @@ struct AsyncImageLoader: View {
     }
     
     private func loadImage() {
-        let _ = print("🖼️ AsyncImageLoader - Starting to load: \(url)")
         URLSession.shared.dataTask(with: url) { data, response, error in
             DispatchQueue.main.async {
                 isLoading = false
                 if let data = data, let uiImage = UIImage(data: data) {
-                    let _ = print("🖼️ AsyncImageLoader - Image loaded successfully")
                     image = uiImage
                 } else {
-                    let _ = print("🖼️ AsyncImageLoader - Image failed to load: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }.resume()
@@ -59,21 +56,17 @@ struct ArticleCard: View {
 
     var body: some View {
         Button {
-            print("🖱️ ArticleCard tapped for: \(article.displayTitle)")
             onTap?(article)
         } label: {
             HStack(alignment: .top, spacing: 12) {
                 // MARK: - Article Image
                 if let imageURL = article.imageURL {
-                    let _ = print("🖼️ ArticleCard - Loading image from: \(imageURL)")
                     AsyncImageLoader(url: imageURL)
                         .frame(width: 80, height: 80)
                         .clipped()
                         .background(Color("MainColor").opacity(0.1))
                         .cornerRadius(12)
                 } else {
-                    let _ = print("🖼️ ArticleCard - No image URL for article: \(article.displayTitle)")
-                    let _ = print("🖼️ ArticleCard - urlToImage: \(article.urlToImage ?? "nil")")
                     // Fallback to newspaper icon if no image URL
                     Image(systemName: "newspaper")
                         .resizable()
