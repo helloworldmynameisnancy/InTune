@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TopicExclusionView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    @State private var goBack = false
+    @Environment(\.dismiss) var dismiss
     @State private var goNext = false
     
     var body: some View {
@@ -22,19 +22,18 @@ struct TopicExclusionView: View {
                 currentQuestionIndex: 2,
                 totalQuestions: 4,
                 onBack: {
-                    goBack = true
+                    dismiss()
                 },
                 onNext: {
-                    goNext = true
+                    withAnimation(.none) {
+                        goNext = true
+                    }
                 },
                 isFinalPage: false
             )
             .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $goNext) {
                 TimeAvailabilityView()
-            }
-            .navigationDestination(isPresented: $goBack) {
-                TopicView()
             }
         }
     }

@@ -22,7 +22,8 @@ struct QuantityAdjustmentView: View {
                         .fontWeight(.bold)
                         .foregroundColor(.primary)
                     
-                    Text("Choose how many articles to display")
+                    Text("Choose how many articles to display, then tap the refresh button to update your feed.")
+                        .padding(.horizontal)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)

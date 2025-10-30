@@ -32,7 +32,7 @@ struct HomeView: View {
                         .padding(.bottom, 30)
                     
                     NavigationLink(destination: MoodView()) {
-                        Text("Tune me in")
+                        Text("Tune Me In")
                             .font(.system(size: 20))
                             .foregroundStyle(.white)
                             .padding()
@@ -42,9 +42,7 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationBarBackButtonHidden(true)
         }
-        
     }
 }
 

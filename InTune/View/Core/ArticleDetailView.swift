@@ -10,6 +10,7 @@ import SwiftUI
 struct ArticleDetailView: View {
     let article: Article
     @EnvironmentObject var viewModel: SavedArticlesViewModel
+    @Environment(\.dismiss) var dismiss
     @State private var isBookmarked: Bool
     @State private var showSafari = false
     
@@ -24,6 +25,37 @@ struct ArticleDetailView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
+                    
+                    // Back Button and Bookmark
+                    HStack {
+                        NavigationButton(direction: .back) {
+                            dismiss()
+                        }
+                        .padding(.leading, 20)
+                        .padding(.top, 8)
+                        
+                        Spacer()
+                        
+                        Button {
+                            isBookmarked.toggle()
+                            viewModel.toggleBookmark(for: article)
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .fill(.white)
+                                    .frame(width: 40, height: 40)
+                                
+                                Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                                    .font(.system(size: 17, weight: .semibold))
+                                    .foregroundColor(Color("MainColor"))
+                            }
+                            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 2)
+                        }
+                        .padding(.trailing, 30)
+                        .padding(.top, 8)
+                    }
+
+                    
                     // MARK: - Article Metadata Section
                     VStack(alignment: .leading, spacing: 16) {
                         // Source and Category
@@ -177,19 +209,8 @@ struct ArticleDetailView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    // Toggle bookmark
-                    isBookmarked.toggle()
-                    viewModel.toggleBookmark(for: article)
-                } label: {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
-                        .foregroundColor(Color("MainColor"))
-                }
-            }
-        }
         .onAppear {
             // Check initial bookmark state when view appears
             isBookmarked = viewModel.isArticleSaved(article)

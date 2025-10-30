@@ -9,37 +9,33 @@ import SwiftUI
 
 struct MoodView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    @State private var goBack = false
+    @Environment(\.dismiss) var dismiss
     @State private var goNext = false
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                BackgroundView()
-                
-                SingleQuestionView(
-                    question: "How are you feeling right now?",
-                    options: ["😊 Happy / Positive", "😐 Neutral / Just browsing", "😟 Anxious / Worried", "🤔 Curious / Interested", "😴 Tired / Low energy"],
-                    currentQuestionIndex: 0,
-                    totalQuestions: 4,
-                    onBack: {
-                        goBack = true
-                    },
-                    onNext: {
+        ZStack {
+            BackgroundView()
+            
+            SingleQuestionView(
+                question: "How are you feeling right now?",
+                options: ["😊 Happy / Positive", "😐 Neutral / Just browsing", "😟 Anxious / Worried", "🤔 Curious / Interested", "😴 Tired / Low energy"],
+                currentQuestionIndex: 0,
+                totalQuestions: 4,
+                onBack: {
+                    dismiss()
+                },
+                onNext: {
+                    withAnimation(.none) {
                         goNext = true
-                    },
-                    isFinalPage: false
-                )
-            }
-            .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $goNext) {
-                TopicView()
-            }
-            .navigationDestination(isPresented: $goBack) {
-                HomeView()
-            }
+                    }
+                },
+                isFinalPage: false
+            )
         }
-        
+        .navigationBarBackButtonHidden(true)
+        .navigationDestination(isPresented: $goNext) {
+            TopicView()
+        }
     }
 }
 

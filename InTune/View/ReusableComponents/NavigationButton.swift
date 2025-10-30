@@ -15,9 +15,9 @@ struct NavigationButton: View {
         var iconName: String {
             switch self {
             case .forward:
-                return "arrow.right"
+                return "chevron.right"
             case .back:
-                return "arrow.left"
+                return "chevron.left"
             }
         }
     }
@@ -29,13 +29,14 @@ struct NavigationButton: View {
         Button(action: action) {
             ZStack {
                 Circle()
-                    .fill(Color("ButtonBackgroundColor"))
-                    .frame(width: 30, height: 30)
+                    .fill(.white)
+                    .frame(width: 40, height: 40)
                 
                 Image(systemName: direction.iconName)
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(Color("ButtonArrowColor"))
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(Color("MainColor"))
             }
+            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 2)
         }
     }
 }

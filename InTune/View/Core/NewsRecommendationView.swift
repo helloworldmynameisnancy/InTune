@@ -10,14 +10,27 @@ import SwiftUI
 struct NewsRecommendationView: View {
     @State private var viewModel = RecommendationViewModel()
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
+    @Environment(\.dismiss) var dismiss
     @State private var selectedArticle: Article?
     @State private var showQuantitySheet = false
     
     var body: some View {
         ZStack {
             BackgroundView()
-            
+                        
             VStack(spacing: 0) {
+                
+                // Back Button to Time Availability View
+                HStack {
+                    NavigationButton(direction: .back) {
+                        dismiss()
+                    }
+                    .padding(.leading, 20)
+                    .padding(.top, 8)
+                    
+                    Spacer()
+                }
+                
                 // Header Section
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -100,6 +113,7 @@ struct NewsRecommendationView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationDestination(item: $selectedArticle) { article in
             ArticleDetailView(article: article)
         }
