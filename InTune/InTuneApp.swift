@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct InTuneApp: App {
+    @StateObject var savedViewModel = SavedArticlesViewModel()
+    @StateObject var sessionPreferences = SessionPreferences()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
+                .environmentObject(savedViewModel)
+                .environmentObject(sessionPreferences)
         }
     }
 }

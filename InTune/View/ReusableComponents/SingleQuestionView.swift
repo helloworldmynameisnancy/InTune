@@ -22,6 +22,11 @@ struct SingleQuestionView: View {
     
     @State private var selectedIndices: Set<Int> = []
     
+    var enforceSingleSelection: Bool = false
+    @Binding var singleSelectedIndex: Int?
+    
+    var disableOthersIfSelected: Set<String> = []
+        
     var body: some View {
         ZStack {
             BackgroundView()
@@ -55,18 +60,51 @@ struct SingleQuestionView: View {
                     .padding(.horizontal, 20)
 
                 FlowLayout(spacing: 10) {
-                    ForEach(options.indices, id: \.self) { index in
-                        PreferenceChip(
-                            label: options[index],
-                            isSelected: Binding(
-                                get: { selectedIndices.contains(index) },
-                                set: { newValue in
-                                    if newValue {
-                                        selectedIndices.insert(index)
-                                    } else {
-                                        selectedIndices.remove(index)
+                    ForEach(Array(options.indices), id: \.self) { index in
+                        let label = options[index]
+                        
+                        // Binding for chip selection
+                        let chipBinding = Binding<Bool>(
+                            get: {
+                                enforceSingleSelection ? singleSelectedIndex == index : selectedIndices.contains(index)
+                            },
+                            set: { newValue in
+                                if enforceSingleSelection {
+                                    singleSelectedIndex = newValue ? index : nil
+                                } else {
+                                    if newValue { selectedIndices.insert(index) }
+                                    else { selectedIndices.remove(index) }
+                                }
+                            }
+                        )
+                        
+                        // Determine if chip should be disabled (grayed out)
+                        let isDisabled: Bool = {
+                            if enforceSingleSelection {
+                                return singleSelectedIndex != nil && singleSelectedIndex != index
+                            } else if !disableOthersIfSelected.isEmpty {
+                                let selectedLabels = selectedIndices.map { options[$0] }
+                                for special in disableOthersIfSelected {
+                                    if selectedLabels.contains(special) && special != label {
+                                        return true
                                     }
-                                }                            )
+                                }
+                            }
+                            return false
+                        }()
+                        
+                        // Determine visual selection: ignore selection if disabled
+                        let isSelectedVisual: Bool = !isDisabled && (enforceSingleSelection ? singleSelectedIndex == index : selectedIndices.contains(index))
+                        
+                        PreferenceChip(
+                            label: label,
+                            isSelected: Binding(
+                                get: { isSelectedVisual },
+                                set: { newValue in
+                                    chipBinding.wrappedValue = newValue
+                                }
+                            ),
+                            isEnabled: !isDisabled
                         )
                     }
                 }
@@ -74,6 +112,10 @@ struct SingleQuestionView: View {
             
                 // Forward Button or Generate Button
                 HStack {
+                    let isButtonDisabled: Bool = enforceSingleSelection
+                        ? (singleSelectedIndex == nil)
+                        : selectedIndices.isEmpty
+
                     if isFinalPage {
                         Button(action: onNext) {
                             Text("Generate News")
@@ -84,15 +126,14 @@ struct SingleQuestionView: View {
                                 .background(Color("MainColor"))
                                 .cornerRadius(20)
                         }
-                        .disabled(selectedIndices.isEmpty)
-                        .opacity(selectedIndices.isEmpty ? 0.4 : 1.0)
+                        .disabled(isButtonDisabled)
+                        .opacity(isButtonDisabled ? 0.4 : 1.0)
                     } else {
                         Spacer()
                         NavigationButton(direction: .forward, action: onNext)
-                            .disabled(selectedIndices.isEmpty)
-                            .opacity(selectedIndices.isEmpty ? 0.4 : 1.0)
+                            .disabled(isButtonDisabled)
+                            .opacity(isButtonDisabled ? 0.4 : 1.0)
                     }
-                
                 }
                 .padding()
                 .padding(.horizontal, 25)
@@ -153,21 +194,20 @@ struct FlowLayout: Layout {
     }
 }
 
-#Preview {
-    SingleQuestionView(
-        question: "How are you feeling right now?",
-        options: ["😊 Happy / Positive", "😐 Neutral / Just browsing", "😟 Anxious / Worried", "🤔 Curious / Interested", "😴 Tired / Low energy"],
-        currentQuestionIndex: 0,
-        totalQuestions: 4,
-        onBack: {
-            print("Back tapped")
-        },
-        onNext: {
-            print("Next tapped")
-        },
-        isFinalPage: false
-    )
+struct SingleQuestionView_PreviewWrapper: View {
+    @State private var selectedMoodIndex: Int? = nil
+    
+    var body: some View {
+        SingleQuestionView(
+            question: "How are you feeling right now?",
+            options: ["😊 Happy", "😐 Neutral", "😟 Anxious"],
+            currentQuestionIndex: 0,
+            totalQuestions: 4,
+            onBack: {},
+            onNext: {},
+            isFinalPage: false,
+            enforceSingleSelection: true,
+            singleSelectedIndex: $selectedMoodIndex
+        )
+    }
 }
-
-
-

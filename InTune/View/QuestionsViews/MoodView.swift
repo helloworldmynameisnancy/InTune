@@ -9,8 +9,19 @@ import SwiftUI
 
 struct MoodView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    @Environment(\.dismiss) var dismiss
-    @State private var goNext = false
+    @EnvironmentObject var sessionPreferences: SessionPreferences
+    @Binding var path: NavigationPath
+    @State private var selectedMoodIndex: Int? = nil
+    
+    private let moodOptions = [
+        "😊 Happy / Positive",
+        "😐 Neutral / Just browsing",
+        "😟 Anxious / Worried",
+        "🤔 Curious / Interested",
+        "😴 Tired / Low energy"
+    ]
+    
+    var resetSelection: Bool = false
     
     var body: some View {
         ZStack {
@@ -18,28 +29,39 @@ struct MoodView: View {
             
             SingleQuestionView(
                 question: "How are you feeling right now?",
-                options: ["😊 Happy / Positive", "😐 Neutral / Just browsing", "😟 Anxious / Worried", "🤔 Curious / Interested", "😴 Tired / Low energy"],
+                options: moodOptions,
                 currentQuestionIndex: 0,
                 totalQuestions: 4,
                 onBack: {
-                    dismiss()
+                    path.removeLast()
                 },
                 onNext: {
+                    // Save selection in session preferences
+                    if let index = selectedMoodIndex {
+                        sessionPreferences.mood = moodOptions[index]
+                    }
+                    
+                    // Navigate to next screen
                     withAnimation(.none) {
-                        goNext = true
+                        path.append(Screen.topic)
                     }
                 },
-                isFinalPage: false
+                isFinalPage: false,
+                enforceSingleSelection: true,
+                singleSelectedIndex: $selectedMoodIndex
             )
         }
         .navigationBarBackButtonHidden(true)
-        .navigationDestination(isPresented: $goNext) {
-            TopicView()
+        .onAppear {
+            if resetSelection {
+                selectedMoodIndex = nil
+            }
         }
     }
 }
 
 #Preview {
-    MoodView()
+    MoodView(path: .constant(NavigationPath()))
         .environmentObject(SavedArticlesViewModel())
+        .environmentObject(SessionPreferences())
 }
