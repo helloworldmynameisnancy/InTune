@@ -9,8 +9,19 @@ import SwiftUI
 
 struct TopicView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    @Environment(\.dismiss) var dismiss
-    @State private var goNext = false
+    @EnvironmentObject var sessionPreferences: SessionPreferences
+    @Binding var path: NavigationPath
+    @State private var selectedIndices: Set<Int> = []
+    
+    private let options = [
+        "💻 Technology",
+        "🏛 Politics",
+        "🌍 World news",
+        "🎨 Arts & Culture",
+        "🩺 Health",
+        "⚽ Sports",
+        "🎲 Surprise me"
+    ]
     
     var body: some View {
         ZStack {
@@ -18,28 +29,39 @@ struct TopicView: View {
             
             SingleQuestionView(
                 question: "What topics interest you at the moment?",
-                options: ["💻 Technology", "🏛 Politics", "🌍 World news", "🎨 Arts & Culture", "🩺 Health", "⚽ Sports", "🎲 Surprise me"],
+                options: options,
                 currentQuestionIndex: 1,
                 totalQuestions: 4,
                 onBack: {
-                    dismiss()
+                    path.removeLast()
                 },
                 onNext: {
+                    // Save selected topics in session preferences
+                    let selectedOptions = selectedIndices.map { options[$0] }
+                    if selectedOptions.contains("🎲 Surprise me") {
+                        // "Surprise me" overrides all other selections
+                        sessionPreferences.topics = ["🎲 Surprise me"]
+                    } else {
+                        sessionPreferences.topics = selectedOptions
+                    }
+                    
+                    // Navigate to next screen
                     withAnimation(.none) {
-                        goNext = true
+                        path.append(Screen.topicExclusion)
                     }
                 },
-                isFinalPage: false
+                isFinalPage: false,
+                enforceSingleSelection: false,
+                singleSelectedIndex: .constant(nil),
+                disableOthersIfSelected: ["🎲 Surprise me"]
             )
             .navigationBarBackButtonHidden(true)
-            .navigationDestination(isPresented: $goNext) {
-                TopicExclusionView()
-            }
         }
     }
 }
 
 #Preview {
-    TopicView()
+    TopicView(path: .constant(NavigationPath()))
         .environmentObject(SavedArticlesViewModel())
+        .environmentObject(SessionPreferences())
 }

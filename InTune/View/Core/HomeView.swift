@@ -7,13 +7,22 @@
 
 import SwiftUI
 
+enum Screen: Hashable {
+    case mood
+    case moodReset
+    case topic
+    case topicExclusion
+    case timeAvailability
+    case newsRecommendation
+}
+
 struct HomeView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    
+    @State private var path = NavigationPath()
+
     var body: some View {
-        NavigationStack() {
+        NavigationStack(path: $path) {
             ZStack {
-                
                 BackgroundView()
                 
                 VStack {
@@ -31,15 +40,31 @@ struct HomeView: View {
                         .padding(.top, 1)
                         .padding(.bottom, 30)
                     
-                    NavigationLink(destination: MoodView()) {
-                        Text("Tune Me In")
-                            .font(.system(size: 20))
-                            .foregroundStyle(.white)
-                            .padding()
-                            .padding(.horizontal, 75)
-                            .background(Color("MainColor"))
-                            .cornerRadius(20)
+                    Button("Tune Me In") {
+                        path.append(Screen.mood)
                     }
+                    .font(.system(size: 20))
+                    .foregroundStyle(.white)
+                    .padding()
+                    .padding(.horizontal, 75)
+                    .background(Color("MainColor"))
+                    .cornerRadius(20)
+                }
+            }
+            .navigationDestination(for: Screen.self) { screen in
+                switch screen {
+                case .mood:
+                    MoodView(path: $path, resetSelection: false)
+                case .moodReset:
+                    MoodView(path: $path, resetSelection: true)
+                case .topic:
+                    TopicView(path: $path)
+                case .topicExclusion:
+                    TopicExclusionView(path: $path)
+                case .timeAvailability:
+                    TimeAvailabilityView(path: $path)
+                case .newsRecommendation:
+                    NewsRecommendationView(path: $path)
                 }
             }
         }

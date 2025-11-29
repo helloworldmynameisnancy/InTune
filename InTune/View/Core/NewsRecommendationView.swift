@@ -10,9 +10,9 @@ import SwiftUI
 struct NewsRecommendationView: View {
     @State private var viewModel = RecommendationViewModel()
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
-    @Environment(\.dismiss) var dismiss
     @State private var selectedArticle: Article?
     @State private var showQuantitySheet = false
+    @Binding var path: NavigationPath
     
     var body: some View {
         ZStack {
@@ -23,7 +23,8 @@ struct NewsRecommendationView: View {
                 // Back Button to Time Availability View
                 HStack {
                     NavigationButton(direction: .back) {
-                        dismiss()
+                        path.removeLast(path.count)
+                        path.append(Screen.moodReset)
                     }
                     .padding(.leading, 20)
                     .padding(.top, 8)
@@ -132,6 +133,6 @@ struct NewsRecommendationView: View {
 }
 
 #Preview {
-    NewsRecommendationView()
-        .environmentObject(SavedArticlesViewModel())
+        NewsRecommendationView(path: .constant(NavigationPath()))
+            .environmentObject(SavedArticlesViewModel())
 }
