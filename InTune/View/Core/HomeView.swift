@@ -40,6 +40,38 @@ struct HomeView: View {
                             .background(Color("MainColor"))
                             .cornerRadius(20)
                     }
+                    
+                    // TEMPORARY: API Test Button (remove after testing)
+                    Button {
+                        Task {
+                            let service = NewsAPIAIService()
+                            do {
+                                let success = try await service.testConnection()
+                                print(success ? "\n✅✅✅ API TEST SUCCESSFUL! ✅✅✅\n" : "\n❌❌❌ API TEST FAILED ❌❌❌\n")
+                            } catch {
+                                print("\n❌❌❌ API TEST ERROR: \(error.localizedDescription) ❌❌❌\n")
+                            }
+                        }
+                    } label: {
+                        Text("🧪 Test API Connection")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.blue)
+                            .padding(.top, 10)
+                    }
+                }
+            }
+        }
+        .onAppear {
+            // Auto-test API on app launch (check console)
+            Task {
+                print("\n🚀 Starting API connection test...\n")
+                let service = NewsAPIAIService()
+                do {
+                    let success = try await service.testConnection()
+                    print(success ? "\n✅✅✅ API TEST SUCCESSFUL! ✅✅✅\n" : "\n❌❌❌ API TEST FAILED ❌❌❌\n")
+                } catch {
+                    print("\n❌❌❌ API TEST ERROR: \(error.localizedDescription) ❌❌❌\n")
+                    // end of test
                 }
             }
         }
