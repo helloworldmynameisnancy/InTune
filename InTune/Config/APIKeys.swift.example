@@ -1,6 +1,11 @@
 import Foundation
 
+// INSTRUCTIONS:
+// 1. Copy this file to APIKeys.swift in the same directory
+// 2. Replace the placeholder below with your real API key
+// 3. The real APIKeys.swift file is ignored by git (see .gitignore)
+
 struct APIKeys {
-    static let newsAPIAI = "PUT KEY HERE"
+    static let newsAPIAI = "YOUR_API_KEY_HERE"
 }
 
