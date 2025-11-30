@@ -1,0 +1,6 @@
+import Foundation
+
+struct APIKeys {
+    static let newsAPIAI = "PUT KEY HERE"
+}
+

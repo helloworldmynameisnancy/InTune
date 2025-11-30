@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var sharedSavedViewModel = SavedArticlesViewModel()
+    @EnvironmentObject var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var sessionPreferences: SessionPreferences
     
     var body: some View {
         TabView {
@@ -26,10 +27,11 @@ struct ContentView: View {
                 }
         }
         .tint(Color("MainColor"))
-        .environmentObject(sharedSavedViewModel)
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(SavedArticlesViewModel())
+        .environmentObject(SessionPreferences())
 }

@@ -14,6 +14,13 @@ class RecommendationViewModel {
     private var shownArticleIds: Set<String> = []
     var articleQuantity: Int = Constants.defaultQuantity
     
+    // API Integration Properties
+    private let apiService = NewsAPIAIService()
+    private var allFetchedArticles: [Article] = []
+    var isLoading: Bool = false
+    var errorMessage: String?
+    var allArticlesShown: Bool = false
+    
     private enum UserDefaultsKeys {
         static let shownRecommendationIds = "shownRecommendationIds"
         static let recommendationQuantity = "recommendationQuantity"
@@ -27,21 +34,99 @@ class RecommendationViewModel {
     }
     
     init() {
-        
         // Load persistence data
         loadShownArticleIds()
         loadArticleQuantity()
         
-        // Auto-load initial articles
-        regenerateArticles()
-        
+        // Note: Articles will be fetched via fetchArticles() when view appears
     }
     
     // MARK: - Public Methods
     
+    /// Fetches 100 articles from API using session preferences
+    func fetchArticles(preferences: SessionPreferences) async {
+        print("🟢 [RecommendationViewModel] Preferences - Mood: \(preferences.mood), Topics: \(preferences.topics), Exclusions: \(preferences.topicExclusions.count)")
+        
+        await MainActor.run {
+            isLoading = true
+            errorMessage = nil
+            allArticlesShown = false
+        }
+        
+        do {
+            let articles = try await apiService.fetchArticles(preferences: preferences, count: 100)
+            
+            print("🟢 [RecommendationViewModel] Received \(articles.count) articles from API")
+            
+            await MainActor.run {
+                allFetchedArticles = articles
+                shownArticleIds.removeAll()  // Reset shown IDs for new fetch
+                isLoading = false
+                regenerateArticles()  // Show first batch
+            }
+        } catch {
+            print("❌ [RecommendationViewModel] Error fetching articles: \(error)")
+            print("❌ [RecommendationViewModel] Error description: \(error.localizedDescription)")
+            await MainActor.run {
+                errorMessage = error.localizedDescription
+                isLoading = false
+            }
+        }
+    }
+    
     func regenerateArticles() {
-        let selectedArticles = selectRandomArticles(count: articleQuantity)
-        displayedArticles = selectedArticles
+        // Check if all articles have been shown
+        if allArticlesShown {
+            displayedArticles = []
+            return
+        }
+        
+        // Check if we've shown all fetched articles
+        if shownArticleIds.count >= allFetchedArticles.count {
+            allArticlesShown = true
+            displayedArticles = []
+            saveShownArticleIds()
+            return
+        }
+        
+        // Get unseen articles from fetched articles
+        let unseenArticles = allFetchedArticles.filter { !shownArticleIds.contains($0.id) }
+        
+        // NOTE: Reading time filtering will be added by partner later
+        // For now, use all unseen articles
+        
+        // Select random articles from unseen pool
+        let selectedCount = min(articleQuantity, unseenArticles.count)
+        let shuffled = unseenArticles.shuffled()
+        let selected = Array(shuffled.prefix(selectedCount))
+        
+        // Mark selected as shown
+        for article in selected {
+            shownArticleIds.insert(article.id)
+        }
+        
+        // Update displayed articles
+        displayedArticles = selected
+        
+        // Save shown IDs
+        saveShownArticleIds()
+        
+        // Check if we've now shown all articles
+        if shownArticleIds.count >= allFetchedArticles.count {
+            allArticlesShown = true
+        }
+    }
+    
+    /// Resets and refetches articles with new preferences
+    func resetAndRefetch(preferences: SessionPreferences) async {
+        await MainActor.run {
+            allFetchedArticles.removeAll()
+            shownArticleIds.removeAll()
+            allArticlesShown = false
+            displayedArticles = []
+        }
+        
+        await fetchArticles(preferences: preferences)
     }
     
     func updateQuantity(_ newQuantity: Int) {
@@ -56,50 +141,8 @@ class RecommendationViewModel {
     }
     
     // MARK: - Private Methods
-    
-    // temporary
-    private func selectRandomArticles(count: Int) -> [Article] {
-        
-        // Get available articles (not yet shown)
-        var availableArticles = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
-        
-        // Check if we need to reset (all articles shown)
-        if availableArticles.count < count {
-            resetShownIdsIfAllArticlesShown()
-            // Re-filter after potential reset
-            availableArticles = Article.recommendedArticles.filter { !shownArticleIds.contains($0.id) }
-        }
-        
-        // Use filtered articles
-        let finalAvailable = availableArticles
-        
-        // Select random articles
-        let selectedCount = min(count, finalAvailable.count)
-        let shuffled = finalAvailable.shuffled()
-        let selected = Array(shuffled.prefix(selectedCount))
-        
-        // Add selected IDs to shown set
-        for article in selected {
-            shownArticleIds.insert(article.id)
-        }
-        
-        // Save updated shown IDs
-        saveShownArticleIds()
-        
-        return selected
-    }
-    
-    private func resetShownIdsIfAllArticlesShown() {
-        
-        let totalArticles = Article.recommendedArticles.count
-        let shownCount = shownArticleIds.count
-        
-        
-        if shownCount >= totalArticles {
-            shownArticleIds.removeAll()
-            saveShownArticleIds()
-        }
-    }
+    // Note: selectRandomArticles() and resetShownIdsIfAllArticlesShown() removed
+    // Logic now handled directly in regenerateArticles() using allFetchedArticles
     
     // MARK: - Persistence Methods
     

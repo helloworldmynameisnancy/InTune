@@ -25,6 +25,9 @@ struct SingleQuestionView: View {
     var enforceSingleSelection: Bool = false
     @Binding var singleSelectedIndex: Int?
     
+    // Optional binding for multi-selection - when provided, use this instead of internal state
+    var selectedIndicesBinding: Binding<Set<Int>>? = nil
+    
     var disableOthersIfSelected: Set<String> = []
         
     var body: some View {
@@ -66,24 +69,39 @@ struct SingleQuestionView: View {
                         // Binding for chip selection
                         let chipBinding = Binding<Bool>(
                             get: {
-                                enforceSingleSelection ? singleSelectedIndex == index : selectedIndices.contains(index)
+                                if enforceSingleSelection {
+                                    singleSelectedIndex == index
+                                } else {
+                                    // Use binding if provided, otherwise use internal state
+                                    (selectedIndicesBinding?.wrappedValue ?? selectedIndices).contains(index)
+                                }
                             },
                             set: { newValue in
                                 if enforceSingleSelection {
                                     singleSelectedIndex = newValue ? index : nil
                                 } else {
-                                    if newValue { selectedIndices.insert(index) }
-                                    else { selectedIndices.remove(index) }
+                                    // Update binding if provided, otherwise update internal state
+                                    if let binding = selectedIndicesBinding {
+                                        if newValue {
+                                            binding.wrappedValue.insert(index)
+                                        } else {
+                                            binding.wrappedValue.remove(index)
+                                        }
+                                    } else {
+                                        if newValue { selectedIndices.insert(index) }
+                                        else { selectedIndices.remove(index) }
+                                    }
                                 }
                             }
                         )
                         
                         // Determine if chip should be disabled (grayed out)
+                        let currentSelectedIndices = selectedIndicesBinding?.wrappedValue ?? selectedIndices
                         let isDisabled: Bool = {
                             if enforceSingleSelection {
                                 return singleSelectedIndex != nil && singleSelectedIndex != index
                             } else if !disableOthersIfSelected.isEmpty {
-                                let selectedLabels = selectedIndices.map { options[$0] }
+                                let selectedLabels = currentSelectedIndices.map { options[$0] }
                                 for special in disableOthersIfSelected {
                                     if selectedLabels.contains(special) && special != label {
                                         return true
@@ -94,7 +112,7 @@ struct SingleQuestionView: View {
                         }()
                         
                         // Determine visual selection: ignore selection if disabled
-                        let isSelectedVisual: Bool = !isDisabled && (enforceSingleSelection ? singleSelectedIndex == index : selectedIndices.contains(index))
+                        let isSelectedVisual: Bool = !isDisabled && (enforceSingleSelection ? singleSelectedIndex == index : currentSelectedIndices.contains(index))
                         
                         PreferenceChip(
                             label: label,
@@ -112,9 +130,10 @@ struct SingleQuestionView: View {
             
                 // Forward Button or Generate Button
                 HStack {
+                    let currentSelectedIndices = selectedIndicesBinding?.wrappedValue ?? selectedIndices
                     let isButtonDisabled: Bool = enforceSingleSelection
                         ? (singleSelectedIndex == nil)
-                        : selectedIndices.isEmpty
+                        : currentSelectedIndices.isEmpty
 
                     if isFinalPage {
                         Button(action: onNext) {

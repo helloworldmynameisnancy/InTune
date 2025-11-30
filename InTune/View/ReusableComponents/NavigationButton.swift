@@ -42,11 +42,6 @@ struct NavigationButton: View {
 }
 
 #Preview {
-    NavigationButton(direction: .forward, action: {
-        print("Forward pressed")
-    })
-    
-    NavigationButton(direction: .back, action: {
-        print("Back pressed")
-    })
+    NavigationButton(direction: .forward, action: {})
+    NavigationButton(direction: .back, action: {})
 }

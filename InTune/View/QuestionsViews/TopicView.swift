@@ -15,12 +15,12 @@ struct TopicView: View {
     
     private let options = [
         "💻 Technology",
+        "💼 Business",
         "🏛 Politics",
-        "🌍 World news",
-        "🎨 Arts & Culture",
         "🩺 Health",
         "⚽ Sports",
-        "🎲 Surprise me"
+        "🔬 Science",
+        "🎲 Surprise Me"
     ]
     
     var body: some View {
@@ -38,22 +38,23 @@ struct TopicView: View {
                 onNext: {
                     // Save selected topics in session preferences
                     let selectedOptions = selectedIndices.map { options[$0] }
-                    if selectedOptions.contains("🎲 Surprise me") {
-                        // "Surprise me" overrides all other selections
-                        sessionPreferences.topics = ["🎲 Surprise me"]
+                    if selectedOptions.contains("🎲 Surprise Me") {
+                        // "Surprise Me" overrides all other selections
+                        sessionPreferences.topics = ["🎲 Surprise Me"]
                     } else {
                         sessionPreferences.topics = selectedOptions
                     }
                     
-                    // Navigate to next screen
-                    withAnimation(.none) {
+                    // Navigate to next screen - defer to next run loop to avoid AttributeGraph error
+                    Task { @MainActor in
                         path.append(Screen.topicExclusion)
                     }
                 },
                 isFinalPage: false,
                 enforceSingleSelection: false,
                 singleSelectedIndex: .constant(nil),
-                disableOthersIfSelected: ["🎲 Surprise me"]
+                selectedIndicesBinding: $selectedIndices,
+                disableOthersIfSelected: ["🎲 Surprise Me"]
             )
             .navigationBarBackButtonHidden(true)
         }

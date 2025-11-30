@@ -18,39 +18,44 @@ enum Screen: Hashable {
 
 struct HomeView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var sessionPreferences: SessionPreferences
     @State private var path = NavigationPath()
 
     var body: some View {
         NavigationStack(path: $path) {
             ZStack {
                 BackgroundView()
-                
+
                 VStack {
                     Image("AppLogo")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 187, height: 231)
-                    
+
                     Text("ꙆᥒƮᥙᥒᥱ")
                         .font(.system(size: 50))
                         .padding(.top, -20)
-                    
+
                     Text("News curated just for you.")
                         .font(.system(size: 16))
                         .padding(.top, 1)
                         .padding(.bottom, 30)
-                    
-                    Button("Tune Me In") {
+
+                    // MAIN BUTTON
+                    Button {
                         path.append(Screen.mood)
+                    } label: {
+                        Text("Tune Me In")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white)
+                            .padding()
+                            .padding(.horizontal, 75)
+                            .background(Color("MainColor"))
+                            .cornerRadius(20)
                     }
-                    .font(.system(size: 20))
-                    .foregroundStyle(.white)
-                    .padding()
-                    .padding(.horizontal, 75)
-                    .background(Color("MainColor"))
-                    .cornerRadius(20)
                 }
             }
+            // Navigation destinations
             .navigationDestination(for: Screen.self) { screen in
                 switch screen {
                 case .mood:
@@ -74,4 +79,5 @@ struct HomeView: View {
 #Preview {
     HomeView()
         .environmentObject(SavedArticlesViewModel())
+        .environmentObject(SessionPreferences())
 }
