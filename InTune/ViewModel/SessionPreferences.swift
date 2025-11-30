@@ -60,7 +60,7 @@ extension SessionPreferences {
                 return "news/Sports"
             case "🔬 Science":
                 return "news/Science"
-            case "🎲 Surprise Me":
+            case "🎲 Surprise me":
                 return nil  // No category filter for "Surprise Me"
             default:
                 return nil
@@ -83,14 +83,34 @@ extension SessionPreferences {
             case "❌ Violence":
                 // Comprehensive violence exclusion keywords (15 keywords - broader than just crime, includes all forms of violence)
                 return "violent OR murder OR homicide OR killing OR shooting OR attack OR assault OR death OR altercation OR confrontation OR conflict OR beating OR battery OR stabbing OR fighting"
-            case "❌ Celebrity gossip":
-                // Comprehensive celebrity gossip exclusion keywords (15 keywords)
+            case "❌ Gossip":
+                // Comprehensive gossip exclusion keywords (15 keywords)
                 return "gossip OR scandal OR tabloid OR celebrity OR paparazzi OR affair OR breakup OR divorce OR dating OR romance OR Hollywood OR star OR actor OR actress OR rumor"
             case "🚫 No filters":
                 return nil
             default:
                 return nil
             }
+        }
+    }
+    
+    /// Returns estimated article word count range for the selected time availability (adjusted for typical reading behavior)
+    var targetWordRange: (min: Int, max: Int)? {
+        switch timeAvailability {
+        case "⏳ Under 2 minutes":
+            return (0, 350)       // Quick reads
+
+        case "⏳ 5–10 minutes":
+            return (350, 700)    // Medium-length reads
+
+        case "⏳ 10+ minutes":
+            return (700, Int.max)   // Long-form articles
+
+        case "🕰 Just browsing / no rush":
+            return nil            // No filtering
+
+        default:
+            return nil
         }
     }
     

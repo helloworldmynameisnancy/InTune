@@ -20,7 +20,7 @@ struct TopicView: View {
         "🩺 Health",
         "⚽ Sports",
         "🔬 Science",
-        "🎲 Surprise Me"
+        "🎲 Surprise me"
     ]
     
     var body: some View {
@@ -40,7 +40,7 @@ struct TopicView: View {
                     let selectedOptions = selectedIndices.map { options[$0] }
                     if selectedOptions.contains("🎲 Surprise Me") {
                         // "Surprise Me" overrides all other selections
-                        sessionPreferences.topics = ["🎲 Surprise Me"]
+                        sessionPreferences.topics = ["🎲 Surprise me"]
                     } else {
                         sessionPreferences.topics = selectedOptions
                     }
@@ -54,7 +54,7 @@ struct TopicView: View {
                 enforceSingleSelection: false,
                 singleSelectedIndex: .constant(nil),
                 selectedIndicesBinding: $selectedIndices,
-                disableOthersIfSelected: ["🎲 Surprise Me"]
+                disableOthersIfSelected: ["🎲 Surprise me"]
             )
             .navigationBarBackButtonHidden(true)
         }

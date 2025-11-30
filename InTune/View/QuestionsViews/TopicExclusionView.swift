@@ -17,7 +17,7 @@ struct TopicExclusionView: View {
         "❌ Health & Disease",
         "❌ Politics",
         "❌ Violence",
-        "❌ Celebrity gossip",
+        "❌ Gossip",
         "🚫 No filters"
     ]
     
@@ -26,7 +26,7 @@ struct TopicExclusionView: View {
             BackgroundView()
             
             SingleQuestionView(
-                question: "Anything you want to skip this time?",
+                question: "What would you like to skip this time?",
                 options: options,
                 currentQuestionIndex: 2,
                 totalQuestions: 4,

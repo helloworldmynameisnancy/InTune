@@ -319,11 +319,32 @@ class NewsAPIAIService {
             }()
             
             // Convert articles - categories will be extracted from API response if available
-            let articles = apiResponse.articles.results.compactMap { $0.toArticle(category: fallbackCategory) }
+            let convertedArticles = apiResponse.articles.results.compactMap {
+                        $0.toArticle(category: fallbackCategory)}
+                    
+            let lengthRange = preferences.targetWordRange
+            let filteredArticles: [Article]
+
+            if let range = lengthRange {
+                filteredArticles = convertedArticles.filter { article in
+                    // Use body as fallback
+                    let text = article.content ?? article.description ?? ""
+                    let wc = text.wordCount
+                    
+                    // Long reads only require min
+                    if range.max == Int.max {
+                        return wc >= range.min
+                    } else {
+                        return wc >= range.min && wc <= range.max
+                    }
+                }
+            } else {
+                filteredArticles = convertedArticles
+            }
+
+            print("🔵 [NewsAPIAIService] Filtered \(filteredArticles.count) articles for range \(lengthRange ?? (0,0))")
             
-            print("🔵 [NewsAPIAIService] Successfully converted \(articles.count) articles")
-            
-            return articles
+            return filteredArticles
         } catch {
             print("❌ [NewsAPIAIService] Decoding error: \(error)")
             print("❌ [NewsAPIAIService] Error details: \(error.localizedDescription)")
@@ -346,3 +367,9 @@ class NewsAPIAIService {
     }
 }
 
+extension String {
+    /// Returns the number of words in a string
+    var wordCount: Int {
+        return self.split { $0.isWhitespace || $0.isNewline }.count
+    }
+}
