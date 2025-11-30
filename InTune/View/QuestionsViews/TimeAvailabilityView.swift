@@ -43,8 +43,8 @@ struct TimeAvailabilityView: View {
                         ][index]
                     }
                     
-                    // Navigate to news recommendation screen
-                    withAnimation(.none) {
+                    // Navigate to news recommendation screen - defer to next run loop to avoid AttributeGraph error
+                    Task { @MainActor in
                         path.append(Screen.newsRecommendation)
                     }
                 },

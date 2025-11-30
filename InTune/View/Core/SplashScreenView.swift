@@ -14,7 +14,7 @@ struct SplashScreenView: View {
     
     var body: some View {
         if isActive {
-            HomeView()
+            ContentView()
         } else {
             VStack(spacing: 20) {
                 Image("AppLogo")

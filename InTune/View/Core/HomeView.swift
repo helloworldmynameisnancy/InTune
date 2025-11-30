@@ -18,6 +18,7 @@ enum Screen: Hashable {
 
 struct HomeView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
+    @EnvironmentObject var sessionPreferences: SessionPreferences
     @State private var path = NavigationPath()
 
     var body: some View {
@@ -40,34 +41,17 @@ struct HomeView: View {
                         .padding(.top, 1)
                         .padding(.bottom, 30)
 
-                    // MAIN BUTTON — now styled AND complete
-                    Button("Tune Me In") {
-                        path.append(Screen.mood)
-                    
-                    // TEMPORARY: API Test Button (remove after testing)
+                    // MAIN BUTTON
                     Button {
-                        Task {
-                            let service = NewsAPIAIService()
-                            do {
-                                let success = try await service.testConnection()
-                                print(success ? "\n✅✅✅ API TEST SUCCESSFUL! ✅✅✅\n" : "\n❌❌❌ API TEST FAILED ❌❌❌\n")
-                            } catch {
-                                print("\n❌❌❌ API TEST ERROR: \(error.localizedDescription) ❌❌❌\n")
-                            }
-                        }
+                        path.append(Screen.mood)
                     } label: {
-                        Text("🧪 Test API Connection")
-                            .font(.system(size: 14))
-                            .foregroundStyle(.blue)
-                            .padding(.top, 10)
-                    }
-                            }
-                        }
-                    } label: {
-                        Text("🧪 Test API Connection")
-                            .font(.system(size: 14))
-                            .foregroundStyle(.blue)
-                            .padding(.top, 10)
+                        Text("Tune Me In")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.white)
+                            .padding()
+                            .padding(.horizontal, 75)
+                            .background(Color("MainColor"))
+                            .cornerRadius(20)
                     }
                 }
             }
@@ -89,23 +73,11 @@ struct HomeView: View {
                 }
             }
         }
-        // AUTO API CHECK ON LAUNCH
-        .onAppear {
-            Task {
-                print("\n🚀 Starting API connection test...\n")
-                let service = NewsAPIAIService()
-                do {
-                    let success = try await service.testConnection()
-                    print(success ? "\n✅ API TEST SUCCESSFUL\n" : "\n❌ API TEST FAILED\n")
-                } catch {
-                    print("\n❌ API TEST ERROR: \(error.localizedDescription)\n")
-                }
-            }
-        }
     }
 }
 
 #Preview {
     HomeView()
         .environmentObject(SavedArticlesViewModel())
+        .environmentObject(SessionPreferences())
 }

@@ -41,8 +41,8 @@ struct MoodView: View {
                         sessionPreferences.mood = moodOptions[index]
                     }
                     
-                    // Navigate to next screen
-                    withAnimation(.none) {
+                    // Navigate to next screen - defer to next run loop to avoid AttributeGraph error
+                    Task { @MainActor in
                         path.append(Screen.topic)
                     }
                 },

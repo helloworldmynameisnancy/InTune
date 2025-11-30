@@ -11,71 +11,58 @@ import Combine
 
 class SavedArticlesViewModel: ObservableObject {
     @Published var savedArticles: [Article] = []
-    private var savedArticleIds: Set<String> = []
     
     private enum UserDefaultsKeys {
-        static let savedArticleIds = "savedArticleIds"
+        static let savedArticles = "savedArticles"
+        static let savedArticleIds = "savedArticleIds" // Old key - will be cleared on first run
     }
     
     init() {
-        // TEMPORARY: Clear all UserDefaults to reset everything (DONT DELETE)
-//        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.savedArticleIds)
-//        UserDefaults.standard.removeObject(forKey: "shownArticleIds")
-//        UserDefaults.standard.removeObject(forKey: "articleQuantity")
+        // ⚠️ TEMPORARY: Clear old UserDefaults key on first run after this change
+        // ⚠️ COMMENT THIS LINE BACK AFTER THE FIRST RUN (line 23)
+        // UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.savedArticleIds)
         
         // Load persistence data
-        loadSavedArticleIds()
-        syncSavedArticles()
-    }
-    
-    private func syncSavedArticles() {
-        // Sync savedArticles array with available articles from repository
-        // Filters Article.recommendedArticles to only include articles with IDs in savedArticleIds
-        let allArticles = Article.recommendedArticles
-        
-        // Filter articles to only include those with IDs in saved set
-        savedArticles = allArticles.filter { savedArticleIds.contains($0.id) }
+        loadSavedArticles()
     }
     
     func toggleBookmark(for article: Article) {
-        
-        if savedArticleIds.contains(article.id) {
+        if savedArticles.contains(where: { $0.id == article.id }) {
             // Remove from saved
-            savedArticleIds.remove(article.id)
             savedArticles.removeAll { $0.id == article.id }
         } else {
             // Add to saved
-            savedArticleIds.insert(article.id)
             savedArticles.append(article)
         }
         
         // Save changes to UserDefaults
-        saveSavedArticleIds()
-        
+        saveSavedArticles()
     }
     
     func isArticleSaved(_ article: Article) -> Bool {
-        return savedArticleIds.contains(article.id)
+        return savedArticles.contains(where: { $0.id == article.id })
     }
     
     // MARK: - Persistence Methods
     
-    private func loadSavedArticleIds() {
-        // Load saved article IDs from UserDefaults
-        if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.savedArticleIds),
-           let ids = try? JSONDecoder().decode([String].self, from: data) {
-            savedArticleIds = Set(ids)
+    private func loadSavedArticles() {
+        // Load full saved articles from UserDefaults
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.savedArticles),
+           let articles = try? JSONDecoder().decode([Article].self, from: data) {
+            savedArticles = articles
+            print("✅ SavedArticlesViewModel - Loaded \(articles.count) saved articles from UserDefaults")
         } else {
-            print("ℹ️ SavedArticlesViewModel - No saved article IDs found in UserDefaults or failed to decode")
+            print("ℹ️ SavedArticlesViewModel - No saved articles found in UserDefaults or failed to decode")
         }
     }
     
-    private func saveSavedArticleIds() {
-        // Save saved article IDs to UserDefaults
-        if let data = try? JSONEncoder().encode(Array(savedArticleIds)) {
-            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.savedArticleIds)
+    private func saveSavedArticles() {
+        // Save full saved articles to UserDefaults
+        if let data = try? JSONEncoder().encode(savedArticles) {
+            UserDefaults.standard.set(data, forKey: UserDefaultsKeys.savedArticles)
+            print("✅ SavedArticlesViewModel - Saved \(savedArticles.count) articles to UserDefaults")
         } else {
-            print("⚠️ SavedArticlesViewModel - Failed to encode saved article IDs for UserDefaults")
+            print("⚠️ SavedArticlesViewModel - Failed to encode saved articles for UserDefaults")
         }
     }
 }

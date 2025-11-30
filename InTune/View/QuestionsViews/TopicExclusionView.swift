@@ -11,12 +11,12 @@ struct TopicExclusionView: View {
     @EnvironmentObject var savedViewModel: SavedArticlesViewModel
     @EnvironmentObject var sessionPreferences: SessionPreferences
     @Binding var path: NavigationPath
-    @State private var selectedIndices: Set<Int> = []
+    @State private var selectedIndex: Int? = nil
     
     private let options = [
         "❌ Health & Disease",
         "❌ Politics",
-        "❌ Crime",
+        "❌ Violence",
         "❌ Celebrity gossip",
         "🚫 No filters"
     ]
@@ -34,22 +34,27 @@ struct TopicExclusionView: View {
                     path.removeLast()
                 },
                 onNext: {
-                    // Save selected exclusions in session preferences
-                    let selectedOptions = selectedIndices.map { options[$0] }
-                    if selectedOptions.contains("🚫 No filters") {
-                        sessionPreferences.topicExclusions = []
+                    // Save selected exclusion in session preferences (single selection only)
+                    if let index = selectedIndex {
+                        let selectedOption = options[index]
+                        if selectedOption == "🚫 No filters" {
+                            sessionPreferences.topicExclusions = []
+                        } else {
+                            sessionPreferences.topicExclusions = [selectedOption]
+                        }
                     } else {
-                        sessionPreferences.topicExclusions = selectedOptions
+                        sessionPreferences.topicExclusions = []
                     }
                     
-                    // Navigate to the next screen
-                    withAnimation(.none) {
+                    // Navigate to the next screen - defer to next run loop to avoid AttributeGraph error
+                    Task { @MainActor in
                         path.append(Screen.timeAvailability)
                     }
                 },
                 isFinalPage: false,
-                enforceSingleSelection: false,
-                singleSelectedIndex: .constant(nil),
+                enforceSingleSelection: true,
+                singleSelectedIndex: $selectedIndex,
+                selectedIndicesBinding: nil,
                 disableOthersIfSelected: ["🚫 No filters"]
             )
             .navigationBarBackButtonHidden(true)
