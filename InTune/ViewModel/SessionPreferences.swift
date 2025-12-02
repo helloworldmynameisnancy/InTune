@@ -28,15 +28,15 @@ extension SessionPreferences {
     var targetSentimentRange: (min: Double, max: Double) {
         switch mood {
         case "😊 Happy / Positive":
-            return (0.4, 1.0)  // Strongly positive content
+            return (0.2, 1.0)  // Strongly positive content
         case "😐 Neutral / Just browsing":
-            return (-0.4, 0.4)  // Balanced, neutral content (widened for better results)
+            return (-0.3, 0.3)  // Balanced, neutral content (widened for better results)
         case "😟 Anxious / Worried":
-            return (-0.1, 0.5)  // Calming, avoiding very negative
+            return (0.1, 0.5)  // Calming, avoiding very negative
         case "🤔 Curious / Interested":
-            return (-0.5, 1.0)  // Wide range, diverse content
+            return (-0.2, 0.9)  // Wide range, diverse content
         case "😴 Tired / Low energy":
-            return (0.0, 0.7)  // Light, positive content
+            return (0.2, 0.5)  // Light, positive content
         default:
             return (-1.0, 1.0)  // No filter (fallback)
         }
