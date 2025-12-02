@@ -32,6 +32,7 @@ Config.xcconfig
 *.env
 .env.*
 Config/APIKeys.swift
+InTune/Config/APIKeys.swift
 
 # ===============================
 # Logs & Temp
