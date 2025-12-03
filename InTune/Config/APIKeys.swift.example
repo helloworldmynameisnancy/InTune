@@ -1,0 +1,13 @@
+//
+//  APIKeys.swift.example
+//  InTune
+//
+//  This is a template file. Copy this to APIKeys.swift and add your actual API key.
+//  APIKeys.swift is gitignored and will not be committed to the repository.
+//
+
+import Foundation
+
+struct APIKeys {
+    static let newsAPIAI = "YOUR_API_KEY_HERE"
+}

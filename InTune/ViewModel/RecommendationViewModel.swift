@@ -20,6 +20,7 @@ class RecommendationViewModel {
     var isLoading: Bool = false
     var errorMessage: String?
     var allArticlesShown: Bool = false
+    var noArticlesFound: Bool = false
     
     private enum UserDefaultsKeys {
         static let shownRecommendationIds = "shownRecommendationIds"
@@ -51,6 +52,7 @@ class RecommendationViewModel {
             isLoading = true
             errorMessage = nil
             allArticlesShown = false
+            noArticlesFound = false
         }
         
         do {
@@ -61,8 +63,13 @@ class RecommendationViewModel {
             await MainActor.run {
                 allFetchedArticles = articles
                 shownArticleIds.removeAll()  // Reset shown IDs for new fetch
+                noArticlesFound = articles.isEmpty || articles.count <= articleQuantity  // Treat ≤user's quantity as "no articles found"
                 isLoading = false
-                regenerateArticles()  // Show first batch
+                if !articles.isEmpty && articles.count > articleQuantity {
+                    regenerateArticles()  // Show first batch only if we have more than user's quantity
+                } else {
+                    displayedArticles = []  // Clear displayed articles if too few found
+                }
             }
         } catch {
             print("❌ [RecommendationViewModel] Error fetching articles: \(error)")
@@ -123,6 +130,7 @@ class RecommendationViewModel {
             allFetchedArticles.removeAll()
             shownArticleIds.removeAll()
             allArticlesShown = false
+            noArticlesFound = false
             displayedArticles = []
         }
         
