@@ -30,7 +30,7 @@ extension SessionPreferences {
         case "😊 Happy / Positive":
             return (0.2, 1.0)  // Strongly positive content
         case "😐 Neutral / Just browsing":
-            return (-0.3, 0.3)  // Balanced, neutral content (widened for better results)
+            return (-0.3, 0.3)  // Balanced, neutral content 
         case "😟 Anxious / Worried":
             return (0.1, 0.5)  // Calming, avoiding very negative
         case "🤔 Curious / Interested":
@@ -38,7 +38,7 @@ extension SessionPreferences {
         case "😴 Tired / Low energy":
             return (0.2, 0.5)  // Light, positive content
         default:
-            return (-1.0, 1.0)  // No filter (fallback)
+            return (-1.0, 1.0)  // No filter
         }
     }
     
@@ -118,7 +118,6 @@ extension SessionPreferences {
     }
     
     /// Returns article count for API request
-    /// Always returns 100 - all time options fetch same amount, filtering happens client-side
     var articleCount: Int {
         return 100
     }

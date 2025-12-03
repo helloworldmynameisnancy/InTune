@@ -112,7 +112,6 @@ extension NewsAPIAIArticle {
         
         // Ensure we have a valid URL/URI
         guard !articleUrl.isEmpty else {
-            print("⚠️ [Article Conversion] Skipping article - no URL/URI")
             return nil
         }
         
@@ -121,10 +120,6 @@ extension NewsAPIAIArticle {
         let hasValidAuthor = authors != nil && !authors!.isEmpty && authors!.first?.name != nil && !authors!.first!.name!.isEmpty
         
         guard hasValidImage && hasValidAuthor else {
-            print("⚠️ [Article Conversion] Skipping article - missing image or author")
-            print("   - Title: \(title ?? "No title")")
-            print("   - Has valid image: \(hasValidImage)")
-            print("   - Has valid author: \(hasValidAuthor)")
             return nil
         }
         
@@ -265,7 +260,6 @@ class NewsAPIAIService {
         let requestBody = buildRequest(preferences: preferences)
         
         guard let url = URL(string: baseURL) else {
-            print("❌ [NewsAPIAIService] Invalid URL: \(baseURL)")
             throw NewsAPIError.invalidURL
         }
         
@@ -277,16 +271,13 @@ class NewsAPIAIService {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            print("❌ [NewsAPIAIService] Invalid response type")
             throw NewsAPIError.invalidResponse
         }
         
         guard httpResponse.statusCode == 200 else {
-            print("❌ [NewsAPIAIService] Non-200 status code: \(httpResponse.statusCode)")
             // Try to read error message from response
             if let errorData = try? JSONSerialization.jsonObject(with: data) as? [String: Any] {
                 if let message = errorData["message"] as? String {
-                    print("❌ [NewsAPIAIService] Error message: \(message)")
                     throw NewsAPIError.apiError(message)
                 }
             }
@@ -296,7 +287,6 @@ class NewsAPIAIService {
         // Check for error response first
         if let jsonObject = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
            let errorMessage = jsonObject["error"] as? String {
-            print("❌ [NewsAPIAIService] API returned error: \(errorMessage)")
             throw NewsAPIError.apiError(errorMessage)
         }
         
@@ -341,27 +331,9 @@ class NewsAPIAIService {
             } else {
                 filteredArticles = convertedArticles
             }
-
-            print("🔵 [NewsAPIAIService] Filtered \(filteredArticles.count) articles for range \(lengthRange ?? (0,0))")
             
             return filteredArticles
         } catch {
-            print("❌ [NewsAPIAIService] Decoding error: \(error)")
-            print("❌ [NewsAPIAIService] Error details: \(error.localizedDescription)")
-            if let decodingError = error as? DecodingError {
-                switch decodingError {
-                case .keyNotFound(let key, let context):
-                    print("❌ [NewsAPIAIService] Missing key: \(key.stringValue) at path: \(context.codingPath)")
-                case .typeMismatch(let type, let context):
-                    print("❌ [NewsAPIAIService] Type mismatch: expected \(type) at path: \(context.codingPath)")
-                case .valueNotFound(let type, let context):
-                    print("❌ [NewsAPIAIService] Value not found: \(type) at path: \(context.codingPath)")
-                case .dataCorrupted(let context):
-                    print("❌ [NewsAPIAIService] Data corrupted at path: \(context.codingPath), \(context.debugDescription)")
-                @unknown default:
-                    print("❌ [NewsAPIAIService] Unknown decoding error")
-                }
-            }
             throw NewsAPIError.decodingError(error.localizedDescription)
         }
     }
