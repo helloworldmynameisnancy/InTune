@@ -38,7 +38,7 @@ struct TopicView: View {
                 onNext: {
                     // Save selected topics in session preferences
                     let selectedOptions = selectedIndices.map { options[$0] }
-                    if selectedOptions.contains("🎲 Surprise Me") {
+                    if selectedOptions.contains("🎲 Surprise me") {
                         // "Surprise Me" overrides all other selections
                         sessionPreferences.topics = ["🎲 Surprise me"]
                     } else {
