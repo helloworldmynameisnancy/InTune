@@ -92,6 +92,45 @@ struct NewsRecommendationView: View {
                         Spacer()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if viewModel.noArticlesFound {
+                    // No Articles Found State
+                    VStack(spacing: 24) {
+                        Spacer()
+                        
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 60))
+                            .foregroundColor(.secondary)
+                        
+                        Text("No articles found")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                        
+                        Text("Try adjusting your preferences.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
+                        
+                        Button {
+                            // Go back to preferences
+                            path.removeLast(path.count)
+                            path.append(Screen.moodReset)
+                        } label: {
+                            Text("Go Back")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color("MainColor"))
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal, 40)
+                        .padding(.top, 8)
+                        
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.allArticlesShown {
                     // All Articles Shown State
                     VStack(spacing: 24) {
@@ -263,7 +302,7 @@ struct NewsRecommendationView: View {
         }
         .onAppear {
             // Fetch articles when view appears (only if not already loaded and not loading)
-            if !viewModel.isLoading && viewModel.displayedArticles.isEmpty && viewModel.errorMessage == nil {
+            if !viewModel.isLoading && viewModel.displayedArticles.isEmpty && viewModel.errorMessage == nil && !viewModel.noArticlesFound {
                 Task {
                     await viewModel.fetchArticles(preferences: sessionPreferences)
                 }
