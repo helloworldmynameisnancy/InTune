@@ -10,3 +10,5 @@ This app uses [NewsAPI.ai](http://newsapi.ai) to fetch news articles.
 3. Replace `"PUT KEY HERE"` with your actual API key
 
 **Note:** `APIKeys.swift` is gitignored to protect the API key.
+
+TAs can reach out to either Nancy Luu or Diana Nguyen for the API key.
