@@ -309,8 +309,8 @@ class NewsAPIAIService {
             // Note: With includeArticleCategories=true, API will provide actual categories for each article
             let fallbackCategory: String? = {
                 guard let firstTopic = preferences.topics.first else { return nil }
-                // Skip "Surprise Me" - no category for that
-                if firstTopic == "🎲 Surprise Me" {
+                // Skip "Surprise me" - no category for that
+                if firstTopic == "🎲 Surprise me" {
                     return nil
                 }
                 // Extract category name by removing emoji prefix (e.g., "💼 Business" -> "Business")

@@ -43,7 +43,7 @@ extension SessionPreferences {
     }
     
     /// Maps topic selections to NewsAPI.ai category URIs
-    /// Returns array of category URIs for selected topics (excluding "Surprise Me")
+    /// Returns array of category URIs for selected topics (excluding "Surprise me")
     /// Format: "news/CategoryName" (as returned by suggestCategoriesFast API)
     var newsAPIAICategoryUris: [String] {
         topics.compactMap { topic in
@@ -61,7 +61,7 @@ extension SessionPreferences {
             case "🔬 Science":
                 return "news/Science"
             case "🎲 Surprise me":
-                return nil  // No category filter for "Surprise Me"
+                return nil  // No category filter for "Surprise me"
             default:
                 return nil
             }

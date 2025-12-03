@@ -140,21 +140,9 @@ struct ArticleDetailView: View {
                         
                         // Content
                         VStack(alignment: .leading, spacing: 20) {
-                            if let description = article.description, !description.isEmpty {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Summary")
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                    
-                                    Text(description)
-                                        .font(.body)
-                                        .lineSpacing(4)
-                                }
-                            }
-                            
                             if let content = article.content, !content.isEmpty {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Full Article")
+                                    Text("Full Text")
                                         .font(.headline)
                                         .fontWeight(.semibold)
                                     
@@ -174,7 +162,7 @@ struct ArticleDetailView: View {
                                     } label: {
                                         HStack {
                                             Image(systemName: "safari")
-                                            Text("Read Full Article")
+                                            Text("View Original Article")
                                                 .font(.headline)
                                                 .fontWeight(.semibold)
                                         }
