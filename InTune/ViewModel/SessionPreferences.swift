@@ -74,18 +74,21 @@ extension SessionPreferences {
     var exclusionKeywords: [String] {
         topicExclusions.compactMap { exclusion in
             switch exclusion {
-            case "❌ Health & Disease":
-                // Comprehensive health/disease exclusion keywords (15 words - all single words to stay within limit)
+            case "❌ Disease":
+                // Comprehensive disease exclusion keywords
                 return "pandemic OR outbreak OR epidemic OR virus OR disease OR infection OR illness OR emergency OR crisis OR coronavirus OR covid OR flu OR influenza OR sickness OR diagnosis"
-            case "❌ Politics":
-                // Comprehensive politics exclusion keywords (15 keywords)
-                return "politics OR political OR election OR government OR partisan OR president OR senator OR congress OR campaign OR politician OR voting OR ballot OR legislation OR policy OR democracy"
-            case "❌ Violence":
-                // Comprehensive violence exclusion keywords (15 keywords - broader than just crime, includes all forms of violence)
+            case "❌ Political conflict":
+                // Comprehensive political conflict exclusion keywords
+                return "political debate OR election campaign OR partisan OR investigation OR scandal OR controversy OR political conflict"
+            case "❌ Crime & Violence":
+                // Comprehensive crime & violence exclusion keywords
                 return "violent OR murder OR homicide OR killing OR shooting OR attack OR assault OR death OR altercation OR confrontation OR conflict OR beating OR battery OR stabbing OR fighting"
-            case "❌ Gossip":
-                // Comprehensive gossip exclusion keywords (15 keywords)
+            case "❌ Celebrity drama":
+                // Comprehensive celebrity drama exclusion keywords
                 return "gossip OR scandal OR tabloid OR celebrity OR paparazzi OR affair OR breakup OR divorce OR dating OR romance OR Hollywood OR star OR actor OR actress OR rumor"
+            case "❌ Financial market news":
+                // Comprehensive financial market news exclusion keywords
+                return "stock market OR market crash OR trading OR Dow Jones OR S&P 500 OR NASDAQ OR stock price OR market drop OR recession OR economic crisis"
             case "🚫 No filters":
                 return nil
             default:
