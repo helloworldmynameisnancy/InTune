@@ -31,7 +31,7 @@ Secrets.plist
 Config.xcconfig
 *.env
 .env.*
-Config/APIKeys.swift
+InTune/Config/APIKeys.swift
 
 # ===============================
 # Logs & Temp
