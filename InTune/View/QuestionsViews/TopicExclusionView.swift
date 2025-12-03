@@ -14,10 +14,11 @@ struct TopicExclusionView: View {
     @State private var selectedIndex: Int? = nil
     
     private let options = [
-        "❌ Health & Disease",
-        "❌ Politics",
-        "❌ Violence",
-        "❌ Gossip",
+        "❌ Disease",
+        "❌ Political conflict",
+        "❌ Crime & Violence",
+        "❌ Celebrity drama",
+        "❌ Financial market news",
         "🚫 No filters"
     ]
     
