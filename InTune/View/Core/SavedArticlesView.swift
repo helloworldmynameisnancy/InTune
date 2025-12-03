@@ -50,10 +50,10 @@ struct SavedArticlesView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
-                        // Articles List
+                        // Articles List with the most recently saved one on top
                         ScrollView {
                             LazyVStack(spacing: 16) {
-                                ForEach(viewModel.savedArticles) { article in
+                                ForEach(viewModel.savedArticles.reversed()) { article in
                                     ArticleCard(
                                         article: article,
                                         isBookmarked: viewModel.isArticleSaved(article),
